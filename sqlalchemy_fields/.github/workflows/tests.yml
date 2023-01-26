@@ -1,0 +1,56 @@
+---
+name: Tests
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  tests:
+    name: "Python ${{ matrix.python-version }}"
+    runs-on: "ubuntu-latest"
+
+    strategy:
+      matrix:
+        python-version: ["3.7", "3.8", "3.9", "3.10", "3.11"]
+
+    services:
+      postgres:
+        image: postgres:14-alpine
+        env:
+          POSTGRES_USER: username
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: test_db
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
+    steps:
+      - uses: "actions/checkout@v3"
+      - uses: "actions/setup-python@v4"
+        with:
+          python-version: "${{ matrix.python-version }}"
+      - name: "Install dependencies"
+        run: pip install hatch
+      - name: "Run linting checks"
+        run: hatch run check
+      - name: "Build package & docs"
+        run: |
+          hatch build
+          hatch run docs:build
+      - name: "Run tests with SQLite"
+        env:
+          TEST_DATABASE_URI: "sqlite:///test.db"
+        run: hatch run test
+      - name: "Run tests with PostgreSQL"
+        env:
+          TEST_DATABASE_URI: "postgresql+psycopg2://username:password@localhost:5432/test_db"
+        run: hatch run test
+      - name: "Enforce coverage"
+        run: hatch run cov
+      - name: "Upload Coverage"
+        uses: codecov/codecov-action@v3
+        with:
+          files: coverage.xml
