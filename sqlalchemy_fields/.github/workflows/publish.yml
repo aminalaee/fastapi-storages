@@ -1,0 +1,31 @@
+---
+name: Publish
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  publish:
+    name: "Publish release"
+    runs-on: "ubuntu-latest"
+
+    steps:
+      - uses: "actions/checkout@v3"
+      - uses: "actions/setup-python@v4"
+        with:
+          python-version: 3.9
+      - name: "Install dependencies"
+        run: pip install hatch
+      - name: "Build package & docs"
+        run: |
+          hatch build
+          hatch run docs:build
+      - name: "Publish"
+        run: |
+          hatch publish --no-prompt
+          hatch run docs:deploy
+        env:
+          HATCH_INDEX_USER: __token__
+          HATCH_INDEX_AUTH: ${{ secrets.PYPI_TOKEN }}
