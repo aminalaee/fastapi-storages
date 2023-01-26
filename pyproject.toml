@@ -1,0 +1,110 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "sqlalchemy-fields"
+description = 'SQLAlchemy fields'
+readme = "README.md"
+requires-python = ">=3.7"
+license = "MIT"
+keywords = ["sqlalchemy", "django", "orm"]
+authors = [
+  { name = "Amin Alaee", email = "me@aminalaee.dev" },
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.7",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Topic :: Database",
+  "Topic :: Database :: Database Engines/Servers",
+  "Topic :: Internet",
+  "Topic :: Internet :: WWW/HTTP :: HTTP Servers",
+  "Topic :: Internet :: WWW/HTTP",
+  "Typing :: Typed",
+]
+dependencies = [
+  "email-validator~=1.3",
+  "sqlalchemy>=1.4, <1.5",
+]
+dynamic = ["version"]
+
+[project.urls]
+Documentation = "https://github.com/aminalaee/sqlalchemy-fields#readme"
+Issues = "https://github.com/aminalaee/sqlalchemy-fields/issues"
+Source = "https://github.com/aminalaee/sqlalchemy-fields"
+
+[tool.hatch.version]
+path = "sqlalchemy_fields/__init__.py"
+
+[tool.hatch.build.targets.wheel]
+[tool.hatch.build.targets.sdist]
+include = [
+    "/sqlalchemy_fields",
+]
+
+[tool.hatch.build]
+exclude = [
+  "tests/*",
+]
+
+[tool.hatch.envs.default]
+dependencies = [
+  "autoflake==2.0.0",
+  "black==22.10.0",
+  "build==0.9.0",
+  "coverage==6.5.0",
+  "email-validator==1.3.0",
+  "isort==5.10.1",
+  "mypy==0.982",
+  "psycopg2-binary==2.9.5",
+  "pytest==7.2.0",
+]
+
+[tool.hatch.envs.default.scripts]
+check = "isort --check --project=sqlalchemy_fields . && black --check . && mypy sqlalchemy_fields"
+clean = "rm -r dist site"
+cov = "coverage report --show-missing --skip-covered --fail-under=100 && coverage xml"
+lint = "autoflake --in-place --recursive .s && isort --project=sqlalchemy_fields . && black ."
+test = "python -m coverage run --concurrency=thread,greenlet -m pytest"
+
+[tool.hatch.envs.docs]
+dependencies = [
+  "mkdocs-material==8.5.7",
+  "mkdocs==1.4.1",
+  "mkdocstrings==0.18.1",
+]
+
+[tool.hatch.envs.docs.scripts]
+build = "mkdocs build"
+serve = "mkdocs serve --dev-addr localhost:8080"
+deploy = "mkdocs gh-deploy --force"
+
+[tool.mypy]
+disallow_untyped_defs = true
+ignore_missing_imports = true
+show_error_codes = true
+no_implicit_optional = true
+
+[tool.isort]
+profile = "black"
+combine_as_imports = true
+
+[tool.coverage.run]
+source_pkgs = [
+  "sqlalchemy_fields",
+  "tests",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "pragma: nocover",
+    "except NotImplementedError",
+    "raise NotImplementedError",
+    "if TYPE_CHECKING:",
+]
