@@ -27,21 +27,32 @@ def prepare_database():
     Base.metadata.drop_all(engine)
 
 
+def test_nullable_uuid() -> None:
+    model = Model(uuid=None)
+
+    with Session(engine) as session:
+        session.add(model)
+        session.commit()
+
+        assert model.uuid is None
+
+
 @pytest.mark.parametrize(
-    "uuid",
+    "uuid_",
     [
-        None,
         "12345678-1234-5678-1234-567812345678",
         "12345678123456781234567812345678",
         uuid.UUID("12345678123456781234567812345678"),
     ],
 )
-def test_valid_uuid(uuid: Optional[Union[str, uuid.UUID]]) -> None:
-    model = Model(uuid=uuid)
+def test_valid_uuid(uuid_: Optional[Union[str, uuid.UUID]]) -> None:
+    model = Model(uuid=uuid_)
 
     with Session(engine) as session:
         session.add(model)
         session.commit()
+
+        assert str(model.uuid) == "12345678-1234-5678-1234-567812345678"
 
 
 @pytest.mark.parametrize(
