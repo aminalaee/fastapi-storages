@@ -1,0 +1,46 @@
+site_name: SQLAlchemy Fields
+site_description: SQLAlchemy Fields
+site_url: https://aminalaee.dev/sqlalchemy-fields
+
+theme:
+  name: 'material'
+  palette:
+      primary: white
+
+repo_name: aminalaee/sqlalchemy-fields
+repo_url: https://github.com/aminalaee/sqlalchemy-fields
+edit_uri: ""
+
+markdown_extensions:
+  - markdown.extensions.codehilite:
+      guess_lang: false
+  - admonition
+  - pymdownx.details
+  - pymdownx.highlight
+  - pymdownx.tabbed
+  - pymdownx.superfences
+
+watch:
+  - docs/
+
+plugins:
+  - search
+  - mkdocstrings:
+      default_handler: python
+      handlers:
+        python:
+          rendering:
+            show_root_heading: true
+            show_source: false
+
+extra:
+  analytics:
+    provider: google
+    property: G-MV427T1Z9X
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/aminalaee
+    - icon: fontawesome/brands/twitter
+      link: https://twitter.com/aminalaee
+    - icon: fontawesome/brands/linkedin
+      link: https://www.linkedin.com/in/amin-alaee
