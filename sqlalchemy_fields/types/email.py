@@ -1,8 +1,10 @@
 from typing import Any
 
-from email_validator import validate_email
+from email_validator import EmailNotValidError, validate_email
 from sqlalchemy import types
 from sqlalchemy.engine.interfaces import Dialect
+
+from sqlalchemy_fields.exceptions import ValidationException
 
 
 class Email(types.TypeDecorator):
@@ -17,4 +19,7 @@ class Email(types.TypeDecorator):
         if value is None:
             return value
 
-        return validate_email(value).email
+        try:
+            return validate_email(value).email
+        except EmailNotValidError as exc:
+            raise ValidationException(f"Invalid Email: {value}") from exc
