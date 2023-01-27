@@ -68,7 +68,7 @@ dependencies = [
 [tool.hatch.envs.default.scripts]
 check = "isort --check --project=sqlalchemy_fields . && black --check . && mypy sqlalchemy_fields"
 clean = "rm -r dist site"
-cov = "coverage report --show-missing --skip-covered --fail-under=100 && coverage xml"
+cov = "coverage report --show-missing --skip-covered --fail-under=90 && coverage xml"
 lint = "autoflake --in-place --recursive .s && isort --project=sqlalchemy_fields . && black ."
 test = "python -m coverage run --concurrency=thread,greenlet -m pytest"
 

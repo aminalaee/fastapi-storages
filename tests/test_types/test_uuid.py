@@ -1,4 +1,5 @@
 import uuid
+from typing import Optional, Union
 
 import pytest
 from sqlalchemy import Column, Integer, create_engine
@@ -35,7 +36,7 @@ def prepare_database():
         uuid.UUID("12345678123456781234567812345678"),
     ],
 )
-def test_valid_uuid(uuid: str | uuid.UUID | None) -> None:
+def test_valid_uuid(uuid: Optional[Union[str, uuid.UUID]]) -> None:
     model = Model(uuid=uuid)
 
     with Session(engine) as session:
