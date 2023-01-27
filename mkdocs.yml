@@ -20,9 +20,6 @@ markdown_extensions:
   - pymdownx.tabbed
   - pymdownx.superfences
 
-watch:
-  - docs/
-
 plugins:
   - search
   - mkdocstrings:
