@@ -11,6 +11,9 @@ repo_name: aminalaee/sqlalchemy-fields
 repo_url: https://github.com/aminalaee/sqlalchemy-fields
 edit_uri: ""
 
+nav:
+  - Introduction: 'index.md'
+
 markdown_extensions:
   - markdown.extensions.codehilite:
       guess_lang: false
