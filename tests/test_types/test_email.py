@@ -9,7 +9,7 @@ from sqlalchemy_fields.types import Email
 from tests.engine import database_uri
 
 Base = declarative_base()
-engine = create_engine(database_uri)
+engine = create_engine(database_uri, echo=True)
 
 
 class Model(Base):
