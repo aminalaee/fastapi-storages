@@ -1,6 +1,6 @@
 from typing import Any
 
-from email_validator import validate_email, EmailNotValidError
+from email_validator import EmailNotValidError, validate_email
 from sqlalchemy import types
 from sqlalchemy.engine.interfaces import Dialect
 
