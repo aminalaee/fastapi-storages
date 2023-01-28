@@ -58,6 +58,7 @@ def test_valid_url(url: Optional[str]) -> None:
         "mailto:me@aminalaee.dev",
         "aminalaee?.dev",
         "http:///aminalaee.dev",
+        "http://[aminalaee.dev",
     ],
 )
 def test_invalid_url(url: str) -> None:
