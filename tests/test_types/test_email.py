@@ -34,6 +34,8 @@ def test_valid_email(email: Optional[str]) -> None:
         session.add(model)
         session.commit()
 
+        assert model.email == email
+
 
 @pytest.mark.parametrize("email", ["", "me@domain.fake", "aminalaee.dev"])
 def test_invalid_email(email: str) -> None:
