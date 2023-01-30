@@ -54,7 +54,6 @@ exclude = [
 
 [tool.hatch.envs.default]
 dependencies = [
-  "autoflake==2.0.0",
   "black==22.10.0",
   "build==0.9.0",
   "coverage==6.5.0",
@@ -63,13 +62,25 @@ dependencies = [
   "mypy==0.982",
   "psycopg2-binary==2.9.5",
   "pytest==7.2.0",
+  "ruff==0.0.237",
 ]
 
 [tool.hatch.envs.default.scripts]
-check = "isort --check --project=sqlalchemy_fields . && black --check . && mypy sqlalchemy_fields"
-clean = "rm -r dist site"
-cov = "coverage report --show-missing --skip-covered --fail-under=99 && coverage xml"
-lint = "autoflake --in-place --recursive .s && isort --project=sqlalchemy_fields . && black ."
+check = [
+  "ruff .",
+  "isort --check --project=sqlalchemy_fields .",
+  "black --check .",
+  "mypy sqlalchemy_fields",
+]
+cov = [
+  "coverage report --show-missing --skip-covered --fail-under=99",
+  "coverage xml",
+]
+format = [
+  "isort --project=sqlalchemy_fields .",
+  "black .",
+  "ruff --fix .",
+]
 test = "coverage run -a -m pytest"
 
 [tool.hatch.envs.docs]
