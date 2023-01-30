@@ -1,18 +1,18 @@
 from typing import Any
 from urllib.parse import urlparse
 
-from sqlalchemy import types
 from sqlalchemy.engine.interfaces import Dialect
+from sqlalchemy.types import TypeDecorator, Unicode
 
 from sqlalchemy_fields.exceptions import ValidationException
 
 
-class URL(types.TypeDecorator):
+class URL(TypeDecorator):
     """
     URL type with validation.
     """
 
-    impl = types.Unicode
+    impl = Unicode
     cache_ok = True
 
     def process_bind_param(self, value: Any, dialect: Dialect) -> None:

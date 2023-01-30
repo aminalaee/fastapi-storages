@@ -1,18 +1,18 @@
 from typing import Any
 
 from email_validator import EmailNotValidError, validate_email
-from sqlalchemy import types
 from sqlalchemy.engine.interfaces import Dialect
+from sqlalchemy.types import TypeDecorator, Unicode
 
 from sqlalchemy_fields.exceptions import ValidationException
 
 
-class Email(types.TypeDecorator):
+class Email(TypeDecorator):
     """
     Email type with validation using email-validator package.
     """
 
-    impl = types.Unicode
+    impl = Unicode
     cache_ok = True
 
     def process_bind_param(self, value: Any, dialect: Dialect) -> None:
