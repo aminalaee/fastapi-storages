@@ -13,12 +13,12 @@ IPAddress_TYPE = Union[IPv4Address, IPv6Address]
 
 class IPAddress(TypeDecorator):
     """
-    IPAddress type supporting both IPV4 and IPV6.
+    IPAddress type supporting both IPv4 and IPv6.
     Uses PostgreSQL's INET type, otherwise uses
     CHAR(39), storing as string values.
     """
 
-    def __init__(self, length: int = 39, *args, **kwargs) -> None:
+    def __init__(self, length: int = 39, *args: Any, **kwargs: Any) -> None:
         self.length = length
         super().__init__(*args, **kwargs)
 
