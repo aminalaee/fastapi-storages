@@ -14,7 +14,13 @@ IPAddress_TYPE = Union[IPv4Address, IPv6Address]
 class IPAddress(TypeDecorator):
     """
     IPAddress type supporting both IPV4 and IPV6.
+    Uses PostgreSQL's INET type, otherwise uses
+    CHAR(39), storing as string values.
     """
+
+    def __init__(self, length: int = 39, *args, **kwargs) -> None:
+        self.length = length
+        super().__init__(*args, **kwargs)
 
     impl = CHAR
     cache_ok = True
@@ -23,7 +29,7 @@ class IPAddress(TypeDecorator):
         if dialect.name == "postgresql":
             return dialect.type_descriptor(postgresql.INET())
         else:
-            return dialect.type_descriptor(CHAR())
+            return dialect.type_descriptor(CHAR(self.length))
 
     def process_bind_param(self, value: Any, dialect: Dialect) -> Optional[str]:
         if value is None:
