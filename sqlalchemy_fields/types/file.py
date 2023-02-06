@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Optional
 
 from sqlalchemy.engine.interfaces import Dialect
 from sqlalchemy.types import TypeDecorator, Unicode
@@ -19,7 +19,7 @@ class File(TypeDecorator):
         self.storage = storage
         super().__init__(*args, **kwargs)
 
-    def process_bind_param(self, value: Any, dialect: Dialect) -> str:
+    def process_bind_param(self, value: Any, dialect: Dialect) -> Optional[str]:
         if value is None:
             return value
 
@@ -27,7 +27,9 @@ class File(TypeDecorator):
         file.write(file=value.file)
         return file.name
 
-    def process_result_value(self, value: Any, dialect: Dialect) -> StorageFile:
+    def process_result_value(
+        self, value: Any, dialect: Dialect
+    ) -> Optional[StorageFile]:
         if value is None:
             return value
 

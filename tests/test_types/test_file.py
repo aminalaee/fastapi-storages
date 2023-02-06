@@ -1,11 +1,12 @@
 from pathlib import Path
 from typing import BinaryIO
+
 import pytest
 from sqlalchemy import Column, Integer, create_engine
 from sqlalchemy.orm import Session, declarative_base
 
-from sqlalchemy_fields.types import File
 from sqlalchemy_fields.storages import FileSystemStorage
+from sqlalchemy_fields.types import File
 from tests.engine import database_uri
 
 Base = declarative_base()

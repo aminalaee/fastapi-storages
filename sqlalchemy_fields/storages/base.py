@@ -26,16 +26,19 @@ class StorageFile:
     @property
     def name(self) -> str:
         """File name including extension."""
+
         return self._storage.get_name(self._name)
 
     @property
     def path(self) -> str:
         """Complete file path."""
+
         return self._storage.get_path(self._name)
 
     @property
     def size(self) -> int:
         """File size in bytes."""
+
         return self._storage.get_size(self._name)
 
     def open(self) -> BinaryIO:
@@ -54,6 +57,3 @@ class StorageFile:
 
     def __str__(self) -> str:
         return self.name
-
-    def content(self):
-        return self._storage.open(self._name).read(-1)
