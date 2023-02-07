@@ -18,7 +18,7 @@ class Email(TypeDecorator):
     impl = Unicode
     cache_ok = True
 
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         if email_validator is None:
             raise ImportError("'email_validator' package is required.")
         super().__init__(*args, **kwargs)
