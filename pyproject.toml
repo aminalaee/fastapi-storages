@@ -28,10 +28,14 @@ classifiers = [
   "Typing :: Typed",
 ]
 dependencies = [
-  "email-validator~=1.3",
-  "sqlalchemy>=1.4, <1.5",
+  "sqlalchemy>=1.4",
 ]
 dynamic = ["version"]
+
+[project.optional-dependencies]
+full = [
+  "email-validator~=1.3",
+]
 
 [project.urls]
 Documentation = "https://github.com/aminalaee/sqlalchemy-fields#readme"

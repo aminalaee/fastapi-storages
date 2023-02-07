@@ -1,6 +1,9 @@
 from typing import Any
 
-from email_validator import EmailNotValidError, validate_email
+try:
+    import email_validator
+except ImportError:
+    email_validator = None
 from sqlalchemy.engine.interfaces import Dialect
 from sqlalchemy.types import TypeDecorator, Unicode
 
@@ -15,11 +18,16 @@ class Email(TypeDecorator):
     impl = Unicode
     cache_ok = True
 
+    def __init__(self, *args, **kwargs) -> None:
+        if email_validator is None:
+            raise ImportError("'email_validator' package is required.")
+        super().__init__(*args, **kwargs)
+
     def process_bind_param(self, value: Any, dialect: Dialect) -> None:
         if value is None:
             return value
 
         try:
-            return validate_email(value).email
-        except EmailNotValidError as exc:
+            return email_validator.validate_email(value).email
+        except email_validator.EmailNotValidError as exc:
             raise ValidationException(f"Invalid Email: {value}") from exc

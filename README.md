@@ -14,6 +14,7 @@
 
 ```console
 pip install sqlalchemy-fields
+pip install 'sqlalchemy-fields[full]'
 ```
 
 ## Extra SQLAlchemy column types

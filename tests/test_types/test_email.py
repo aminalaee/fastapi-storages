@@ -16,7 +16,7 @@ class Model(Base):
     __tablename__ = "model"
 
     id = Column(Integer, primary_key=True)
-    email = Column(Email)
+    email = Column(Email())
 
 
 @pytest.fixture(autouse=True)
