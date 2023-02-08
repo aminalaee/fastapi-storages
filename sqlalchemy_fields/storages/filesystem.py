@@ -30,10 +30,8 @@ class FileSystemStorage(BaseStorage):
         return open(path, "rb")
 
     def write(self, file: BinaryIO, name: str) -> None:
-        path = self._path / Path(secure_filename(name))
-
-        if path.is_dir():
-            return
+        filename = secure_filename(name)
+        path = self._path / Path(filename)
 
         file.seek(0, 0)
         with open(path, "wb") as output:
