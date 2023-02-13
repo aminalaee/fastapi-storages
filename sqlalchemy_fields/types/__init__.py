@@ -1,13 +1,13 @@
-from .email import Email
-from .file import File
-from .ip import IPAddress
-from .url import URL
-from .uuid import UUID
+from .email import EmailType
+from .file import FileType
+from .ip import IPAddressType
+from .url import URLType
+from .uuid import UUIDType
 
 __all__ = [
-    "Email",
-    "File",
-    "IPAddress",
-    "URL",
-    "UUID",
+    "EmailType",
+    "FileType",
+    "IPAddressType",
+    "URLType",
+    "UUIDType",
 ]

@@ -5,7 +5,7 @@ from sqlalchemy import Column, Integer, create_engine
 from sqlalchemy.exc import StatementError
 from sqlalchemy.orm import Session, declarative_base
 
-from sqlalchemy_fields.types import URL
+from sqlalchemy_fields.types import URLType
 from tests.engine import database_uri
 
 Base = declarative_base()
@@ -16,7 +16,7 @@ class Model(Base):
     __tablename__ = "model"
 
     id = Column(Integer, primary_key=True)
-    url = Column(URL)
+    url = Column(URLType)
 
 
 @pytest.fixture(autouse=True)

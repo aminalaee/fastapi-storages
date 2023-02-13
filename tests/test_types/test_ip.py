@@ -6,7 +6,7 @@ from sqlalchemy import Column, Integer, create_engine
 from sqlalchemy.exc import StatementError
 from sqlalchemy.orm import Session, declarative_base
 
-from sqlalchemy_fields.types import IPAddress
+from sqlalchemy_fields.types import IPAddressType
 from tests.engine import database_uri
 
 Base = declarative_base()
@@ -17,7 +17,7 @@ class Model(Base):
     __tablename__ = "model"
 
     id = Column(Integer, primary_key=True)
-    ip = Column(IPAddress)
+    ip = Column(IPAddressType)
 
 
 @pytest.fixture(autouse=True)

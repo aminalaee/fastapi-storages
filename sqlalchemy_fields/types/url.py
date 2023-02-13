@@ -7,7 +7,7 @@ from sqlalchemy.types import TypeDecorator, Unicode
 from sqlalchemy_fields.exceptions import ValidationException
 
 
-class URL(TypeDecorator):
+class URLType(TypeDecorator):
     """
     URL type with validation.
     """
