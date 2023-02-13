@@ -8,8 +8,19 @@ from sqlalchemy_fields.storages.base import BaseStorage, StorageFile
 
 class FileType(TypeDecorator):
     """
-    File type to be used with FileSystemStorage.
-    Stores the file path in the column.
+    File type to be used with `FileSystemStorage`. Stores the file path in the column.
+
+    ???+ usage
+        ```python
+        from sqlalchemy_fields.storages import FileSystemStorage
+        from sqlalchemy_fields.types import FileType
+
+        class Example(Base):
+            __tablename__ = "example"
+
+            id = Column(Integer, primary_key=True)
+            file = Column(FileType(storage=FileSystemStorage(path="/tmp")))
+        ```
     """
 
     impl = Unicode

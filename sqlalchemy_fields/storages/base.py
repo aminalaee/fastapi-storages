@@ -19,6 +19,10 @@ class BaseStorage:  # pragma: no cover
 
 
 class StorageFile:
+    """
+    The file obect returned by the storage.
+    """
+
     def __init__(self, *, name: str, storage: BaseStorage):
         self._name = name
         self._storage = storage

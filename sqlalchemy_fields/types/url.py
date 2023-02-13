@@ -9,7 +9,19 @@ from sqlalchemy_fields.exceptions import ValidationException
 
 class URLType(TypeDecorator):
     """
-    URL type with validation.
+    URL type with validation using Python standard library.
+
+    ???+ usage
+        ```python
+        from sqlalchemy_fields.types import URLType
+
+        class Example(Base):
+            __tablename__ = "example"
+
+            id = Column(Integer, primary_key=True)
+            url = Column(URLType())
+            website = Column(URLType(length=1024))
+        ```
     """
 
     impl = Unicode

@@ -91,7 +91,7 @@ test = "coverage run -a -m pytest"
 dependencies = [
   "mkdocs-material==8.5.7",
   "mkdocs==1.4.1",
-  "mkdocstrings==0.18.1",
+  "mkdocstrings[python]==0.18.1",
 ]
 
 [tool.hatch.envs.docs.scripts]
