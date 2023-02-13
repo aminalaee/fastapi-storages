@@ -12,7 +12,19 @@ from sqlalchemy_fields.exceptions import ValidationException
 
 class EmailType(TypeDecorator):
     """
-    Email type with validation using email-validator package.
+    Email type with validation using `email-validator` package.
+
+    ???+ usage
+        ```python
+        from sqlalchemy_fields.types import EmailType
+
+        class Example(Base):
+            __tablename__ = "example"
+
+            id = Column(Integer, primary_key=True)
+            email = Column(EmailType())
+            billing_email = Column(EmailType(length=128))
+        ```
     """
 
     impl = Unicode

@@ -13,6 +13,8 @@ edit_uri: ""
 
 nav:
   - Introduction: 'index.md'
+  - Types: 'types.md'
+  - Storages: 'storages.md'
 
 markdown_extensions:
   - markdown.extensions.codehilite:
@@ -32,6 +34,9 @@ plugins:
           rendering:
             show_root_heading: true
             show_source: false
+
+watch:
+  - sqlalchemy_fields/
 
 extra:
   analytics:

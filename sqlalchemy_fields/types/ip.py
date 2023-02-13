@@ -13,9 +13,20 @@ IPAddress_TYPE = Union[IPv4Address, IPv6Address]
 
 class IPAddressType(TypeDecorator):
     """
-    IPAddress type supporting both IPv4 and IPv6.
-    Uses PostgreSQL's INET type, otherwise uses
-    CHAR(39), storing as string values.
+    IPAddress type supporting both IPv4 and IPv6
+    using standard library's ipaddress module.
+    Uses PostgreSQL's INET type, otherwise uses CHAR(39), storing as string values.
+
+    ???+ usage
+        ```python
+        from sqlalchemy_fields.types import IPAddressType
+
+        class Example(Base):
+            __tablename__ = "example"
+
+            id = Column(Integer, primary_key=True)
+            ip = Column(IPAddressType())
+        ```
     """
 
     def __init__(self, length: int = 39, *args: Any, **kwargs: Any) -> None:
