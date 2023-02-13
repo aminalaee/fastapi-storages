@@ -7,7 +7,7 @@ from sqlalchemy.sql.type_api import TypeEngine
 from sqlalchemy.types import CHAR, TypeDecorator
 
 
-class UUID(TypeDecorator):
+class UUIDType(TypeDecorator):
     """Platform-independent UUID type.
     Uses PostgreSQL's UUID type, otherwise uses
     CHAR(32), storing as stringified hex values.

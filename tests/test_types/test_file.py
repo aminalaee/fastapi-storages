@@ -6,7 +6,7 @@ from sqlalchemy import Column, Integer, create_engine
 from sqlalchemy.orm import Session, declarative_base
 
 from sqlalchemy_fields.storages import FileSystemStorage
-from sqlalchemy_fields.types import File
+from sqlalchemy_fields.types import FileType
 from tests.engine import database_uri
 
 Base = declarative_base()
@@ -27,7 +27,7 @@ class Model(Base):
     __tablename__ = "model"
 
     id = Column(Integer, primary_key=True)
-    file = Column(File(storage=FileSystemStorage(path="/tmp")))
+    file = Column(FileType(storage=FileSystemStorage(path="/tmp")))
 
 
 @pytest.fixture(autouse=True)

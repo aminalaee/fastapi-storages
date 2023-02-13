@@ -6,7 +6,7 @@ from sqlalchemy.types import TypeDecorator, Unicode
 from sqlalchemy_fields.storages.base import BaseStorage, StorageFile
 
 
-class File(TypeDecorator):
+class FileType(TypeDecorator):
     """
     File type to be used with FileSystemStorage.
     Stores the file path in the column.

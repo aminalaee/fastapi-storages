@@ -8,7 +8,7 @@
 **Table of Contents**
 
 - [Installation](#installation)
-- [License](#license)
+- [Custom Types](#custom-types)
 
 ## Installation
 
@@ -17,27 +17,29 @@ pip install sqlalchemy-fields
 pip install 'sqlalchemy-fields[full]'
 ```
 
-## Extra SQLAlchemy column types
+## Custom Types
 
-- Email
-- File
-- IP
-- URL
-- UUID
+- `EmailType`
+- `FileType`
+- `IPAddressType`
+- `URLType`
+- `UUIDType`
 
 ```python
 from sqlalchemy import Column, Integer, create_engine
 from sqlalchemy.orm import Session, declarative_base
-from sqlalchemy_fields.types import IPAddress
+from sqlalchemy_fields.types import IPAddressType
+
 
 Base = declarative_base()
 engine = create_engine("sqlite:///example.db")
+
 
 class Example(Base):
     __tablename__ = "example"
 
     id = Column(Integer, primary_key=True)
-    ip = Column(IPAddress)
+    ip = Column(IPAddressType)
 
 
 example = Example(ip="127.0.0.1")

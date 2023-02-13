@@ -10,7 +10,7 @@ from sqlalchemy.types import TypeDecorator, Unicode
 from sqlalchemy_fields.exceptions import ValidationException
 
 
-class Email(TypeDecorator):
+class EmailType(TypeDecorator):
     """
     Email type with validation using email-validator package.
     """

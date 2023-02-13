@@ -6,7 +6,7 @@ from sqlalchemy import Column, Integer, create_engine
 from sqlalchemy.exc import StatementError
 from sqlalchemy.orm import Session, declarative_base
 
-from sqlalchemy_fields.types import Email
+from sqlalchemy_fields.types import EmailType
 from tests.engine import database_uri
 
 Base = declarative_base()
@@ -17,7 +17,7 @@ class Model(Base):
     __tablename__ = "model"
 
     id = Column(Integer, primary_key=True)
-    email = Column(Email())
+    email = Column(EmailType())
 
 
 @pytest.fixture(autouse=True)
@@ -32,7 +32,7 @@ def test_email_validator_not_installed(monkeypatch) -> None:
 
     with monkeypatch.context() as m:
         m.setitem(sys.modules, "email_validator", None)
-        Email()
+        EmailType()
 
 
 @pytest.mark.parametrize("email", [None, "me@aminalaee.dev"])

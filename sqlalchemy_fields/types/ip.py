@@ -11,7 +11,7 @@ from sqlalchemy_fields.exceptions import ValidationException
 IPAddress_TYPE = Union[IPv4Address, IPv6Address]
 
 
-class IPAddress(TypeDecorator):
+class IPAddressType(TypeDecorator):
     """
     IPAddress type supporting both IPv4 and IPv6.
     Uses PostgreSQL's INET type, otherwise uses
