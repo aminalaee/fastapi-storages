@@ -61,3 +61,20 @@ class StorageFile:
 
     def __str__(self) -> str:
         return self.name
+
+
+class StorageImage(StorageFile):
+    def __init__(
+        self, *, name: str, storage: BaseStorage, height: int, width: int
+    ) -> None:
+        super().__init__(name=name, storage=storage)
+        self._width = width
+        self._height = height
+
+    @property
+    def height(self) -> int:
+        return self._height
+
+    @property
+    def width(self) -> int:
+        return self._width

@@ -21,6 +21,7 @@ pip install 'sqlalchemy-fields[full]'
 
 - `EmailType`
 - `FileType`
+- `ImageType`
 - `IPAddressType`
 - `URLType`
 - `UUIDType`
