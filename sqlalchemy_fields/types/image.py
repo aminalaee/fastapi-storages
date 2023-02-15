@@ -8,7 +8,7 @@ try:
 
     PIL = True
 except ImportError:
-    PIL = None
+    PIL = False
 
 from sqlalchemy_fields.exceptions import ValidationException
 from sqlalchemy_fields.storages.base import BaseStorage, StorageImage
@@ -36,7 +36,7 @@ class ImageType(TypeDecorator):
     cache_ok = True
 
     def __init__(self, storage: BaseStorage, *args: Any, **kwargs: Any) -> None:
-        if PIL is None:
+        if not PIL:
             raise ImportError("'Pillow' package is required.")
 
         self.storage = storage
