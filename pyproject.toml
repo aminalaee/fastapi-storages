@@ -35,6 +35,7 @@ dynamic = ["version"]
 [project.optional-dependencies]
 full = [
   "email-validator~=1.3",
+  "Pillow~=9.4",
 ]
 
 [project.urls]

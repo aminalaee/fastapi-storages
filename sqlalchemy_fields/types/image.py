@@ -16,7 +16,8 @@ from sqlalchemy_fields.storages.base import BaseStorage, StorageImage
 
 class ImageType(TypeDecorator):
     """
-    Image type to be used with Storage classes. Stores the file path in the column.
+    Image type using `PIL` package to be used with Storage classes.
+    Stores the image path in the column.
 
     ???+ usage
         ```python
@@ -67,4 +68,6 @@ class ImageType(TypeDecorator):
             return value
 
         image = Image.open(self.storage.get_path(value))
-        return StorageImage(name=value, storage=self.storage, height=image.height, width=image.width)
+        return StorageImage(
+            name=value, storage=self.storage, height=image.height, width=image.width
+        )

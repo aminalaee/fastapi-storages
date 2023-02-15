@@ -64,6 +64,10 @@ class StorageFile:
 
 
 class StorageImage(StorageFile):
+    """
+    Inherits features of `StorageFile` and adds image specific properties.
+    """
+
     def __init__(
         self, *, name: str, storage: BaseStorage, height: int, width: int
     ) -> None:
@@ -73,8 +77,16 @@ class StorageImage(StorageFile):
 
     @property
     def height(self) -> int:
+        """
+        Image height in pixels.
+        """
+
         return self._height
 
     @property
     def width(self) -> int:
+        """
+        Image width in pixels.
+        """
+
         return self._width
