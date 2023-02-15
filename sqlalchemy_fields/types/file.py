@@ -8,7 +8,7 @@ from sqlalchemy_fields.storages.base import BaseStorage, StorageFile
 
 class FileType(TypeDecorator):
     """
-    File type to be used with `FileSystemStorage`. Stores the file path in the column.
+    File type to be used with Storage classes. Stores the file path in the column.
 
     ???+ usage
         ```python
