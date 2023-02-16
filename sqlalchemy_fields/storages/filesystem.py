@@ -18,8 +18,7 @@ class FileSystemStorage(BaseStorage):
 
     def __init__(self, path: str):
         self._path = Path(path)
-        if not self._path.exists():
-            self._path.mkdir()
+        self._path.mkdir(parents=True, exist_ok=True)
 
     def get_name(self, name: str) -> str:
         """
