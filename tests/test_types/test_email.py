@@ -28,7 +28,9 @@ def prepare_database():
 
 
 def test_email_validator_not_installed(monkeypatch) -> None:
-    monkeypatch.setitem(sys.modules, "foo_fast", None)
+    with monkeypatch.context() as m:
+        m.setitem(sys.modules, "email_validator", None)
+        from sqlalchemy_fields.types import EmailType
 
     with monkeypatch.context() as m:
         m.setitem(sys.modules, "email_validator", None)

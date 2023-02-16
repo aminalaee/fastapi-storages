@@ -1,3 +1,4 @@
+import sys
 from pathlib import Path
 from typing import BinaryIO
 
@@ -78,3 +79,13 @@ def test_nullable_image() -> None:
         session.commit()
 
         assert model.image is None
+
+
+def test_pillow_not_installed(monkeypatch) -> None:
+    with monkeypatch.context() as m:
+        m.setitem(sys.modules, "PIL", None)
+        from sqlalchemy_fields.types import ImageType
+
+    with monkeypatch.context() as m:
+        m.setitem(sys.modules, "PIL", None)
+        ImageType(storage=FileSystemStorage(""))
