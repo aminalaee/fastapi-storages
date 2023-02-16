@@ -84,8 +84,8 @@ def test_nullable_image() -> None:
 def test_pillow_not_installed(monkeypatch) -> None:
     with monkeypatch.context() as m:
         m.setitem(sys.modules, "PIL", None)
-        from sqlalchemy_fields.types import EmailType
+        from sqlalchemy_fields.types import ImageType
 
     with monkeypatch.context() as m:
         m.setitem(sys.modules, "PIL", None)
-        EmailType()
+        ImageType(storage=FileSystemStorage(""))
