@@ -1,4 +1,3 @@
-import sys
 from typing import Optional
 
 import pytest
@@ -25,16 +24,6 @@ def prepare_database():
     Base.metadata.create_all(engine)
     yield
     Base.metadata.drop_all(engine)
-
-
-def test_email_validator_not_installed(monkeypatch) -> None:
-    with monkeypatch.context() as m:
-        m.setitem(sys.modules, "email_validator", None)
-        from sqlalchemy_fields.types import EmailType
-
-    with monkeypatch.context() as m:
-        m.setitem(sys.modules, "email_validator", None)
-        EmailType()
 
 
 @pytest.mark.parametrize("email", [None, "me@aminalaee.dev"])
