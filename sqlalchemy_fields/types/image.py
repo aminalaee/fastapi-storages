@@ -61,7 +61,7 @@ class ImageType(TypeDecorator):
 
         image_file.close()
         value.file.close()
-        return image.name
+        return image.path
 
     def process_result_value(
         self, value: Any, dialect: Dialect
