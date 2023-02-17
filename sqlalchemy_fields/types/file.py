@@ -36,6 +36,8 @@ class FileType(TypeDecorator):
 
         file = StorageFile(name=value.filename, storage=self.storage)
         file.write(file=value.file)
+
+        value.file.close()
         return file.name
 
     def process_result_value(

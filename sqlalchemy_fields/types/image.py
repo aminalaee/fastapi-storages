@@ -36,8 +36,7 @@ class ImageType(TypeDecorator):
     cache_ok = True
 
     def __init__(self, storage: BaseStorage, *args: Any, **kwargs: Any) -> None:
-        if not PIL:
-            raise ImportError("'Pillow' package is required.")
+        assert PIL is True, "'Pillow' package is required."
 
         self.storage = storage
         super().__init__(*args, **kwargs)
@@ -59,6 +58,9 @@ class ImageType(TypeDecorator):
             width=image_file.width,
         )
         image.write(file=value.file)
+
+        image_file.close()
+        value.file.close()
         return image.name
 
     def process_result_value(

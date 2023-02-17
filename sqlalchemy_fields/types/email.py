@@ -31,8 +31,7 @@ class EmailType(TypeDecorator):
     cache_ok = True
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        if email_validator is None:
-            raise ImportError("'email_validator' package is required.")
+        assert email_validator is not None, "'email_validator' package is required."
         super().__init__(*args, **kwargs)
 
     def process_bind_param(self, value: Any, dialect: Dialect) -> None:
