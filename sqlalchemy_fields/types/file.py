@@ -38,7 +38,7 @@ class FileType(TypeDecorator):
         file.write(file=value.file)
 
         value.file.close()
-        return file.path
+        return file.name
 
     def process_result_value(
         self, value: Any, dialect: Dialect

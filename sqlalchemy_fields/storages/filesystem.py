@@ -46,7 +46,7 @@ class FileSystemStorage(BaseStorage):
         path = self._path / Path(name)
         return open(path, "rb")
 
-    def write(self, file: BinaryIO, name: str) -> None:
+    def write(self, file: BinaryIO, name: str) -> str:
         """
         Write input file which is opened in binary mode to destination.
         """
@@ -61,3 +61,5 @@ class FileSystemStorage(BaseStorage):
                 if not chunk:
                     break
                 output.write(chunk)
+
+        return str(path)

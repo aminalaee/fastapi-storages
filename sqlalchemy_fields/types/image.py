@@ -7,7 +7,7 @@ try:
     from PIL import Image, UnidentifiedImageError
 
     PIL = True
-except ImportError:
+except ImportError:  # pragma: no cover
     PIL = False
 
 from sqlalchemy_fields.exceptions import ValidationException
@@ -61,7 +61,7 @@ class ImageType(TypeDecorator):
 
         image_file.close()
         value.file.close()
-        return image.path
+        return image.name
 
     def process_result_value(
         self, value: Any, dialect: Dialect
