@@ -73,3 +73,8 @@ with Session(engine) as session:
 IPv4Address("127.0.0.1")
 """
 ```
+
+## Storages
+
+- `FileSystemStorage`
+- `S3Storage`

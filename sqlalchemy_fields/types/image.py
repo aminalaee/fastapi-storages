@@ -7,7 +7,7 @@ try:
     from PIL import Image, UnidentifiedImageError
 
     PIL = True
-except ImportError:
+except ImportError:  # pragma: no cover
     PIL = False
 
 from sqlalchemy_fields.exceptions import ValidationException

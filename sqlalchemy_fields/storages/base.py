@@ -14,7 +14,7 @@ class BaseStorage:  # pragma: no cover
     def open(self, name: str) -> BinaryIO:
         ...
 
-    def write(self, file: BinaryIO, name: str) -> None:
+    def write(self, file: BinaryIO, name: str) -> str:
         ...
 
 
@@ -52,7 +52,7 @@ class StorageFile:
 
         return self._storage.open(self._name)
 
-    def write(self, file: BinaryIO) -> None:
+    def write(self, file: BinaryIO) -> str:
         """
         Write input file which is opened in binary mode to destination.
         """
@@ -60,7 +60,7 @@ class StorageFile:
         return self._storage.write(file=file, name=self._name)
 
     def __str__(self) -> str:
-        return self.name
+        return self.path
 
 
 class StorageImage(StorageFile):

@@ -13,7 +13,7 @@ def test_filesystem_storage_file_properties(tmp_path: Path) -> None:
     assert file.name == "example.txt"
     assert file.size == 3
     assert file.path == str(tmp_file)
-    assert str(file) == file.name
+    assert str(file).endswith(file.name)
 
 
 def test_filesystem_storage_image_properties(tmp_path: Path) -> None:
