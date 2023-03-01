@@ -17,14 +17,14 @@ def test_s3_storage_methods(tmp_path: Path) -> None:
     tmp_file = tmp_path / "example.txt"
     tmp_file.write_bytes(b"123")
 
-    class PrivateSS3Storage(S3Storage):
+    class PrivateS3Storage(S3Storage):
         AWS_ACCESS_KEY_ID = "access"
         AWS_SECRET_ACCESS_KEY = "secret"
         AWS_S3_BUCKET_NAME = "test-bucket"
         AWS_S3_ENDPOINT_URL = "custom.s3.endpoint"
         AWS_S3_USE_SSL = False
 
-    storage = PrivateSS3Storage()
+    storage = PrivateS3Storage()
 
     assert storage.get_name("test (1).txt") == "test_1.txt"
     assert (

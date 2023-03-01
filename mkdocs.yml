@@ -13,8 +13,10 @@ edit_uri: ""
 
 nav:
   - Introduction: 'index.md'
-  - Types: 'types.md'
-  - Storages: 'storages.md'
+  - Usage: 'usage.md'
+  - API Reference:
+    - Types: 'api_reference/types.md'
+    - Storages: 'api_reference/storages.md'
 
 markdown_extensions:
   - markdown.extensions.codehilite:

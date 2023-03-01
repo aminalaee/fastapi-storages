@@ -15,6 +15,7 @@ class S3Storage(BaseStorage):
     """
     Amazon S3 or any S3 compatible storage backend.
     You might want to use this with the `FileType` type.
+    Requires 'boto3' to be installed.
     """
 
     AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID", "")
