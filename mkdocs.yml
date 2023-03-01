@@ -13,6 +13,7 @@ edit_uri: ""
 
 nav:
   - Introduction: 'index.md'
+  - Usage: 'usage.md'
   - API Reference:
     - Types: 'api_reference/types.md'
     - Storages: 'api_reference/storages.md'
