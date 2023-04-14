@@ -33,6 +33,8 @@ class FileType(TypeDecorator):
     def process_bind_param(self, value: Any, dialect: Dialect) -> Optional[str]:
         if value is None:
             return value
+        if len(value.file.read(1)) != 1:
+            return None
 
         file = StorageFile(name=value.filename, storage=self.storage)
         file.write(file=value.file)

@@ -44,6 +44,8 @@ class ImageType(TypeDecorator):
     def process_bind_param(self, value: Any, dialect: Dialect) -> Optional[str]:
         if value is None:
             return value
+        if len(value.file.read(1)) != 1:
+            return None
 
         try:
             image_file = Image.open(value.file)
