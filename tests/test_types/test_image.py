@@ -1,3 +1,4 @@
+import io
 from pathlib import Path
 from typing import BinaryIO
 
@@ -72,6 +73,17 @@ def test_invalid_image(tmp_path: Path) -> None:
 
 def test_nullable_image() -> None:
     model = Model(image=None)
+
+    with Session(engine) as session:
+        session.add(model)
+        session.commit()
+
+        assert model.image is None
+
+
+def test_clear_empty_image() -> None:
+    upload_file = UploadFile(file=io.BytesIO(b""), filename="")
+    model = Model(image=upload_file)
 
     with Session(engine) as session:
         session.add(model)
