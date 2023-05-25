@@ -1,4 +1,5 @@
 import os
+import
 from pathlib import Path
 from typing import BinaryIO
 
@@ -66,6 +67,16 @@ class S3Storage(BaseStorage):
         key = self.get_name(name)
         return self._bucket.Object(key).content_length
 
+    def open(self, name: str) -> BinaryIO:
+        """
+        Open file for reading.
+        """
+        key = self.get_name(name)
+        obj = self._bucket.Object(key)
+        rsp = obj.get()
+        data = rsp['Body'].read()
+        return io.BytesIO(data)
+    
     def write(self, file: BinaryIO, name: str) -> str:
         """
         Write input file which is opened in binary mode to destination.
