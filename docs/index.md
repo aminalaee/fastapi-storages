@@ -78,3 +78,6 @@ IPv4Address("127.0.0.1")
 
 - `FileSystemStorage`
 - `S3Storage`
+
+When using `FileType` or `ImageType` you would need a storage backend to save the files.
+For more information and examples you can read [here](usage.md#working-with-storages).
