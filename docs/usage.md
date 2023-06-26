@@ -118,6 +118,7 @@ class AssetS3Storage(S3Storage):
     AWS_SECRET_ACCESS_KEY = "secret"
     AWS_S3_BUCKET_NAME = "test"
     AWS_S3_ENDPOINT_URL = "s3.amazonaws.com"
+    AWS_DEFAULT_ACL = "public-read"
     AWS_S3_USE_SSL = False
 
 

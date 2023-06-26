@@ -24,11 +24,18 @@ class S3Storage(BaseStorage):
     AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY", "")
     """AWS secret access key. Either set here or as an environment variable."""
 
+    AWS_S3_BUCKET_NAME = ""
+    """AWS S3 bucket name to use."""
+
     AWS_S3_ENDPOINT_URL = ""
     """AWS S3 endpoint URL."""
 
     AWS_S3_USE_SSL = True
     """Indicate if SSL should be used."""
+
+    AWS_DEFAULT_ACL = ""
+    """Optional ACL set on the object like `public-read`.
+    By default file will be private."""
 
     def __init__(self) -> None:
         assert boto3 is not None, "'boto3' is not installed"
@@ -79,5 +86,5 @@ class S3Storage(BaseStorage):
 
         file.seek(0, 0)
         key = self.get_name(name)
-        self._bucket.upload_fileobj(file, key)
+        self._bucket.upload_fileobj(file, key, ExtraArgs={"ACL": self.AWS_DEFAULT_ACL})
         return key
