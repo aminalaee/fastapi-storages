@@ -87,7 +87,7 @@ format = [
   "black .",
   "ruff --fix .",
 ]
-test = "coverage run -a -m pytest"
+test = "coverage run -a -m pytest {args}"
 
 [tool.hatch.envs.docs]
 dependencies = [
