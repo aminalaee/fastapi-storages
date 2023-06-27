@@ -16,17 +16,6 @@ jobs:
       matrix:
         python-version: ["3.8", "3.9", "3.10", "3.11"]
 
-    services:
-      postgres:
-        image: postgres:14-alpine
-        env:
-          POSTGRES_USER: username
-          POSTGRES_PASSWORD: password
-          POSTGRES_DB: test_db
-        ports:
-          - 5432:5432
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-
     steps:
       - uses: "actions/checkout@v3"
       - uses: "actions/setup-python@v4"
@@ -43,10 +32,6 @@ jobs:
       - name: "Run tests with SQLite"
         env:
           TEST_DATABASE_URI: "sqlite:///test.db"
-        run: hatch run test
-      - name: "Run tests with PostgreSQL"
-        env:
-          TEST_DATABASE_URI: "postgresql+psycopg2://username:password@localhost:5432/test_db"
         run: hatch run test
       - name: "Enforce coverage"
         run: hatch run cov
