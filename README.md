@@ -28,6 +28,8 @@
 
 A collection of backend storages and ORM extensions to simplify file management in FastAPI and Starlette projects.
 
+Similar to `django-storages` project, but aiming to work with a wider range of database ORMs and backends.
+
 ---
 
 **Documentation**: [https://aminalaee.dev/fastapi-storages](https://aminalaee.dev/fastapi-storages)
@@ -35,11 +37,6 @@ A collection of backend storages and ORM extensions to simplify file management 
 **Source Code**: [https://github.com/aminalaee/fastapi-storages](https://github.com/aminalaee/fastapi-storages)
 
 ---
-
-**Table of Contents**
-
-- [Installation](#installation)
-- [Custom Types](#custom-types)
 
 ## Installation
 
@@ -58,6 +55,8 @@ pip install 'fastapi-storages[full]'
 
 - `FileSystemStorage`
 - `S3Storage`
+
+## Example
 
 ```python
 from fastapi import FastAPI, UploadFile
