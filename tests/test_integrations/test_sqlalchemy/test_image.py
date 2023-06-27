@@ -8,8 +8,8 @@ from sqlalchemy import Column, Integer, create_engine
 from sqlalchemy.exc import StatementError
 from sqlalchemy.orm import Session, declarative_base
 
-from sqlalchemy_fields.storages import FileSystemStorage
-from sqlalchemy_fields.types import ImageType
+from fastapi_storages import FileSystemStorage
+from fastapi_storages.integrations.sqlalchemy import ImageType
 from tests.engine import database_uri
 
 Base = declarative_base()

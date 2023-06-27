@@ -1,8 +1,8 @@
 from pathlib import Path
 from typing import BinaryIO
 
-from sqlalchemy_fields.storages.base import BaseStorage
-from sqlalchemy_fields.storages.utils import secure_filename
+from fastapi_storages.base import BaseStorage
+from fastapi_storages.utils import secure_filename
 
 
 class FileSystemStorage(BaseStorage):

@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from sqlalchemy_fields.storages import FileSystemStorage, StorageFile, StorageImage
+from fastapi_storages import FileSystemStorage, StorageFile, StorageImage
 
 
 def test_filesystem_storage_file_properties(tmp_path: Path) -> None:

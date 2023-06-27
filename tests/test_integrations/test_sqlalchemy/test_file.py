@@ -6,8 +6,8 @@ import pytest
 from sqlalchemy import Column, Integer, create_engine
 from sqlalchemy.orm import Session, declarative_base
 
-from sqlalchemy_fields.storages import FileSystemStorage
-from sqlalchemy_fields.types import FileType
+from fastapi_storages import FileSystemStorage
+from fastapi_storages.integrations.sqlalchemy import FileType
 from tests.engine import database_uri
 
 Base = declarative_base()

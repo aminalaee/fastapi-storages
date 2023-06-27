@@ -3,10 +3,10 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "sqlalchemy-fields"
-description = 'SQLAlchemy fields'
+name = "fastapi-storages"
+description = 'FastAPI Storages'
 readme = "README.md"
-requires-python = ">=3.7"
+requires-python = ">=3.8"
 license = "MIT"
 keywords = ["sqlalchemy", "django", "orm"]
 authors = [
@@ -15,7 +15,6 @@ authors = [
 classifiers = [
   "Development Status :: 4 - Beta",
   "Programming Language :: Python",
-  "Programming Language :: Python :: 3.7",
   "Programming Language :: Python :: 3.8",
   "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
@@ -28,29 +27,28 @@ classifiers = [
   "Typing :: Typed",
 ]
 dependencies = [
-  "sqlalchemy>=1.4",
+  "boto3~=1.25",
 ]
 dynamic = ["version"]
 
 [project.optional-dependencies]
 full = [
-  "boto3~=1.25",
-  "email-validator~=1.3",
   "Pillow~=9.4",
+  "sqlalchemy>=1.4",
 ]
 
 [project.urls]
-Documentation = "https://github.com/aminalaee/sqlalchemy-fields#readme"
-Issues = "https://github.com/aminalaee/sqlalchemy-fields/issues"
-Source = "https://github.com/aminalaee/sqlalchemy-fields"
+Documentation = "https://github.com/aminalaee/fastapi-storages#readme"
+Issues = "https://github.com/aminalaee/fastapi-storages/issues"
+Source = "https://github.com/aminalaee/fastapi-storages"
 
 [tool.hatch.version]
-path = "sqlalchemy_fields/__init__.py"
+path = "fastapi_storages/__init__.py"
 
 [tool.hatch.build.targets.wheel]
 [tool.hatch.build.targets.sdist]
 include = [
-    "/sqlalchemy_fields",
+    "/fastapi_storages",
 ]
 
 [tool.hatch.build]
@@ -61,23 +59,21 @@ exclude = [
 [tool.hatch.envs.default]
 dependencies = [
   "black==22.10.0",
-  "boto3~=1.25",
   "build==0.9.0",
   "coverage==6.5.0",
-  "email-validator==1.3.0",
   "moto==4.1.2",
   "mypy==0.982",
   "Pillow==9.4.0",
-  "psycopg2-binary==2.9.5",
   "pytest==7.2.0",
   "ruff==0.0.237",
+  "sqlalchemy>=1.4",
 ]
 
 [tool.hatch.envs.default.scripts]
 check = [
   "ruff .",
   "black --check .",
-  "mypy sqlalchemy_fields",
+  "mypy fastapi_storages",
 ]
 cov = [
   "coverage report --show-missing --skip-covered --fail-under=99",
@@ -87,7 +83,7 @@ format = [
   "black .",
   "ruff --fix .",
 ]
-test = "coverage run -a -m pytest {args}"
+test = "coverage run -m pytest {args}"
 
 [tool.hatch.envs.docs]
 dependencies = [
@@ -112,7 +108,7 @@ select = ["E", "F", "I"]
 
 [tool.coverage.run]
 source_pkgs = [
-  "sqlalchemy_fields",
+  "fastapi_storages",
   "tests",
 ]
 

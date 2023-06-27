@@ -1,28 +1,38 @@
-# SQLAlchemy Fields
+<p align="center">
+<a href="https://github.com/aminalaee/fastapi-storages">
+    <img width="500px" src="https://raw.githubusercontent.com/aminalaee/fastapi-storages/main/docs/assets/images/banner.png" alt"FastAPI_Storages">
+</a>
+</p>
 
 <p align="center">
-<a href="https://github.com/aminalaee/sqlalchemy-fields/actions">
-    <img src="https://github.com/aminalaee/sqlalchemy-fields/workflows/Tests/badge.svg" alt="Build Status">
+<a href="https://github.com/aminalaee/fastapi-storages/actions">
+    <img src="https://github.com/aminalaee/fastapi-storages/workflows/Tests/badge.svg" alt="Build Status">
 </a>
-<a href="https://github.com/aminalaee/sqlalchemy-fields/actions">
-    <img src="https://github.com/aminalaee/sqlalchemy-fields/workflows/Publish/badge.svg" alt="Publish Status">
+<a href="https://github.com/aminalaee/fastapi-storages/actions">
+    <img src="https://github.com/aminalaee/fastapi-storages/workflows/Publish/badge.svg" alt="Publish Status">
 </a>
-<a href="https://codecov.io/gh/aminalaee/sqlalchemy-fields">
-    <img src="https://codecov.io/gh/aminalaee/sqlalchemy-fields/branch/main/graph/badge.svg" alt="Coverage">
+<a href="https://codecov.io/gh/aminalaee/fastapi-storages">
+    <img src="https://codecov.io/gh/aminalaee/fastapi-storages/branch/main/graph/badge.svg" alt="Coverage">
 </a>
-<a href="https://pypi.org/project/sqlalchemy-fields/">
-    <img src="https://badge.fury.io/py/sqlalchemy-fields.svg" alt="Package version">
+<a href="https://pypi.org/project/fastapi-storages/">
+    <img src="https://badge.fury.io/py/fastapi-storages.svg" alt="Package version">
 </a>
-<a href="https://pypi.org/project/sqlalchemy-fields" target="_blank">
-    <img src="https://img.shields.io/pypi/pyversions/sqlalchemy-fields.svg?color=%2334D058" alt="Supported Python versions">
+<a href="https://pypi.org/project/fastapi-storages" target="_blank">
+    <img src="https://img.shields.io/pypi/pyversions/fastapi-storages.svg?color=%2334D058" alt="Supported Python versions">
 </a>
 </p>
 
 ---
 
-**Documentation**: [https://aminalaee.dev/sqlalchemy-fields](https://aminalaee.dev/sqlalchemy-fields)
+# FastAPI Storages
 
-**Source Code**: [https://github.com/aminalaee/sqlalchemy-fields](https://github.com/aminalaee/sqlalchemy-fields)
+A collection of backend storages and ORM extensions to simplify file management in FastAPI and Starlette projects.
+
+---
+
+**Documentation**: [https://aminalaee.dev/fastapi-storages](https://aminalaee.dev/fastapi-storages)
+
+**Source Code**: [https://github.com/aminalaee/fastapi-storages](https://github.com/aminalaee/fastapi-storages)
 
 ---
 
@@ -34,47 +44,49 @@
 ## Installation
 
 ```console
-pip install sqlalchemy-fields
-pip install 'sqlalchemy-fields[full]'
+pip install fastapi-storages
+pip install 'fastapi-storages[full]'
 ```
 
-## Custom Types
+## Supported integrations
 
-- `EmailType`
-- `FileType`
-- `ImageType`
-- `IPAddressType`
-- `URLType`
-- `UUIDType`
+- `SQLAlchemy`
+- `SQLModel`
+- `SQLAdmin`
+
+## Supported storage backends
+
+- `FileSystemStorage`
+- `S3Storage`
 
 ```python
+from fastapi import FastAPI, UploadFile
 from sqlalchemy import Column, Integer, create_engine
 from sqlalchemy.orm import Session, declarative_base
-from sqlalchemy_fields.types import IPAddressType
+from fastapi_storages import FileSystemStorage
+from fastapi_storages.integrations.sqlalchemy import FileType
 
-
+app = FastAPI()
 Base = declarative_base()
-engine = create_engine("sqlite:///example.db")
+engine = create_engine("sqlite:///test.db")
 
 
 class Example(Base):
     __tablename__ = "example"
 
     id = Column(Integer, primary_key=True)
-    ip = Column(IPAddressType)
+    file = Column(FileType(storage=FileSystemStorage(path="/tmp")))
 
 
-example = Example(ip="127.0.0.1")
-with Session(engine) as session:
-    session.add(example)
-    session.commit()
-    print(example.ip)
-"""
-IPv4Address("127.0.0.1")
-"""
+# Create database and table
+Base.metadata.create_all(engine)
+
+
+@app.post("/upload/")
+def create_upload_file(file: UploadFile):
+    example = Example(file=file)
+    with Session(engine) as session:
+        session.add(example)
+        session.commit()
+        return {"filename": example.file.name}
 ```
-
-## Storages
-
-- `FileSystemStorage`
-- `S3Storage`

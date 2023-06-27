@@ -7,8 +7,8 @@ try:
 except ImportError:  # pragma: no cover
     boto3 = None
 
-from sqlalchemy_fields.storages.base import BaseStorage
-from sqlalchemy_fields.storages.utils import secure_filename
+from fastapi_storages.base import BaseStorage
+from fastapi_storages.utils import secure_filename
 
 
 class S3Storage(BaseStorage):
