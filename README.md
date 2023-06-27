@@ -1,4 +1,10 @@
 <p align="center">
+<a href="https://github.com/aminalaee/fastapi-storages">
+    <img width="500px" src="https://raw.githubusercontent.com/aminalaee/fastapi-storages/main/docs/assets/images/banner.png" alt"FastAPI_Storages">
+</a>
+</p>
+
+<p align="center">
 <a href="https://github.com/aminalaee/fastapi-storages/actions">
     <img src="https://github.com/aminalaee/fastapi-storages/workflows/Tests/badge.svg" alt="Build Status">
 </a>
