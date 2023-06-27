@@ -18,10 +18,13 @@ class BaseStorage:  # pragma: no cover
         ...
 
 
-class StorageFile:
+class StorageFile(str):
     """
     The file obect returned by the storage.
     """
+
+    def __new__(cls, name: str, storage: BaseStorage) -> "StorageFile":
+        return str.__new__(cls, storage.get_path(name))
 
     def __init__(self, *, name: str, storage: BaseStorage):
         self._name = name
@@ -67,6 +70,11 @@ class StorageImage(StorageFile):
     """
     Inherits features of `StorageFile` and adds image specific properties.
     """
+
+    def __new__(
+        cls, name: str, storage: BaseStorage, height: int, width: int
+    ) -> "StorageImage":
+        return str.__new__(cls, storage.get_path(name))
 
     def __init__(
         self, *, name: str, storage: BaseStorage, height: int, width: int
