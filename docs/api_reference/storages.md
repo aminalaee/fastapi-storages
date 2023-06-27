@@ -1,6 +1,6 @@
 # Storage types
 
-::: sqlalchemy_fields.storages.StorageFile
-::: sqlalchemy_fields.storages.StorageImage
-::: sqlalchemy_fields.storages.FileSystemStorage
-::: sqlalchemy_fields.storages.S3Storage
+::: fastapi_storages.StorageFile
+::: fastapi_storages.StorageImage
+::: fastapi_storages.FileSystemStorage
+::: fastapi_storages.S3Storage

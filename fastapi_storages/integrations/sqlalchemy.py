@@ -10,8 +10,53 @@ try:
 except ImportError:  # pragma: no cover
     PIL = False
 
-from sqlalchemy_fields.exceptions import ValidationException
-from sqlalchemy_fields.storages.base import BaseStorage, StorageImage
+from fastapi_storages.base import BaseStorage, StorageFile, StorageImage
+from fastapi_storages.exceptions import ValidationException
+
+
+class FileType(TypeDecorator):
+    """
+    File type to be used with Storage classes. Stores the file name in the column.
+
+    ???+ usage
+        ```python
+        from fastapi_storages import FileSystemStorage
+        from fastapi_storages.integrations.sqlalchemy import FileType
+
+        class Example(Base):
+            __tablename__ = "example"
+
+            id = Column(Integer, primary_key=True)
+            file = Column(FileType(storage=FileSystemStorage(path="/tmp")))
+        ```
+    """
+
+    impl = Unicode
+    cache_ok = True
+
+    def __init__(self, storage: BaseStorage, *args: Any, **kwargs: Any) -> None:
+        self.storage = storage
+        super().__init__(*args, **kwargs)
+
+    def process_bind_param(self, value: Any, dialect: Dialect) -> Optional[str]:
+        if value is None:
+            return value
+        if len(value.file.read(1)) != 1:
+            return None
+
+        file = StorageFile(name=value.filename, storage=self.storage)
+        file.write(file=value.file)
+
+        value.file.close()
+        return file.name
+
+    def process_result_value(
+        self, value: Any, dialect: Dialect
+    ) -> Optional[StorageFile]:
+        if value is None:
+            return value
+
+        return StorageFile(name=value, storage=self.storage)
 
 
 class ImageType(TypeDecorator):
@@ -21,8 +66,8 @@ class ImageType(TypeDecorator):
 
     ???+ usage
         ```python
-        from sqlalchemy_fields.storages import FileSystemStorage
-        from sqlalchemy_fields.types import ImageType
+        from fastapi_storages import FileSystemStorage
+        from fastapi_storages.integrations.sqlalchemy import ImageType
 
         class Example(Base):
             __tablename__ = "example"

@@ -1,21 +1,20 @@
-site_name: SQLAlchemy Fields
-site_description: SQLAlchemy Fields
-site_url: https://aminalaee.dev/sqlalchemy-fields
+site_name: FastAPI Storages
+site_description: FastAPI Storages
+site_url: https://aminalaee.dev/fastapi-storages
 
 theme:
   name: 'material'
   palette:
       primary: white
 
-repo_name: aminalaee/sqlalchemy-fields
-repo_url: https://github.com/aminalaee/sqlalchemy-fields
+repo_name: aminalaee/fastapi-storages
+repo_url: https://github.com/aminalaee/fastapi-storages
 edit_uri: ""
 
 nav:
   - Introduction: 'index.md'
   - Usage: 'usage.md'
   - API Reference:
-    - Types: 'api_reference/types.md'
     - Storages: 'api_reference/storages.md'
 
 markdown_extensions:
@@ -38,7 +37,7 @@ plugins:
             show_source: false
 
 watch:
-  - sqlalchemy_fields/
+  - fastapi_storages/
 
 extra:
   analytics:

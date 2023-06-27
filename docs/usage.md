@@ -1,36 +1,3 @@
-## Working with custom types
-
-In order to use the custom types you can easily include them in your
-models the same way you use SQLAlchemy types.
-
-For example:
-
-```python
-from sqlalchemy import Column, Integer, create_engine
-from sqlalchemy.orm import Session, declarative_base
-from sqlalchemy_fields.types import UUIDType
-
-Base = declarative_base()
-engine = create_engine("sqlite:///test.db")
-
-
-class Example(Base):
-    __tablename__ = "example"
-
-    id = Column(Integer, primary_key=True)
-    uuid = Column(UUIDType())
-```
-
-Each custom type will have a different storage,
-even different based on database backend you are using.
-
-So for example if you are using `UUIDType` with PostgreSQL then
-it is already stored as UUID since this is supported by PostgreSQL,
-and in other databases like SQLite and MySQL it is stored as `CHAR(32)`.
-
-Some custom types like `EmailType` require third-party packages
-for valdiation and you need to check that type's documentation at [API Reference](api_reference/types.md).
-
 ## Working with storages
 
 If you're working with `FileType` or `ImageType` then you probably want to use a storage.
@@ -49,8 +16,8 @@ An example to use `FileSystemStorage`:
 ```python
 from sqlalchemy import Column, Integer, create_engine
 from sqlalchemy.orm import declarative_base
-from sqlalchemy_fields.storages import FileSystemStorage
-from sqlalchemy_fields.types import FileType
+from fastapi_storages.storages import FileSystemStorage
+from fastapi_storages.types import FileType
 
 Base = declarative_base()
 engine = create_engine("sqlite:///test.db")
@@ -95,7 +62,7 @@ with Session(engine) as session:
     print(example.file, type(example.file))
 
 """
-/tmp/example.txt, <class 'sqlalchemy_fields.storages.StorageFile'>
+/tmp/example.txt, <class 'fastapi_storages.StorageFile'>
 """
 ```
 
@@ -106,8 +73,8 @@ For example let's say we have a bucket called `test` that we want to store all t
 ```python
 from sqlalchemy import Column, Integer, create_engine
 from sqlalchemy.orm import declarative_base
-from sqlalchemy_fields.storages import S3Storage
-from sqlalchemy_fields.types import FileType
+from fastapi_storages.storages import S3Storage
+from fastapi_storages.types import FileType
 
 Base = declarative_base()
 engine = create_engine("sqlite:///test.db")

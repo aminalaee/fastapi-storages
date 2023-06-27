@@ -4,7 +4,7 @@ from pathlib import Path
 import boto3
 from moto import mock_s3
 
-from sqlalchemy_fields.storages import S3Storage
+from fastapi_storages import S3Storage
 
 os.environ["MOTO_S3_CUSTOM_ENDPOINTS"] = "http://custom.s3.endpoint"
 
