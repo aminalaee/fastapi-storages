@@ -33,8 +33,7 @@ def test_s3_storage_methods(tmp_path: Path) -> None:
         == "http://custom.s3.endpoint/bucket/test_1.txt"
     )
     assert (
-        storage.get_path("a/test.txt")
-        == "http://custom.s3.endpoint/bucket/a/test.txt"
+        storage.get_path("a/test.txt") == "http://custom.s3.endpoint/bucket/a/test.txt"
     )
     assert (
         storage.get_path("a/b/c/test.txt")
@@ -58,7 +57,9 @@ def test_s3_storage_querystring_auth(tmp_path: Path) -> None:
 
     storage = TestStorage()
 
-    assert storage.get_path("test.txt").startswith("http://custom.s3.endpoint/bucket/test.txt?")
+    assert storage.get_path("test.txt").startswith(
+        "http://custom.s3.endpoint/bucket/test.txt?"
+    )
     assert storage.get_path("test.txt").count("AWSAccessKeyId=access") == 1
     assert storage.get_path("test.txt").count("Signature=") == 1
     assert storage.get_path("test.txt").count("Expires=") == 1
@@ -77,4 +78,4 @@ def test_s3_storage_custom_domain(tmp_path: Path) -> None:
 
     storage = TestStorage()
 
-    assert storage.get_path("test.txt") == "http://s3.fastapi.storages/bucket/test.txt"
+    assert storage.get_path("test.txt") == "http://s3.fastapi.storages/test.txt"

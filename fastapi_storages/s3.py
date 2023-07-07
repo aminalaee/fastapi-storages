@@ -76,13 +76,24 @@ class S3Storage(BaseStorage):
         key = self.get_name(name)
 
         if self.AWS_S3_CUSTOM_DOMAIN:
-            return f"{self._http_scheme}://{self.AWS_S3_CUSTOM_DOMAIN}/{self.AWS_S3_BUCKET_NAME}/{key}"
+            return "{}://{}/{}".format(
+                self._http_scheme,
+                self.AWS_S3_CUSTOM_DOMAIN,
+                key,
+            )
 
         if self.AWS_QUERYSTRING_AUTH:
             params = {"Bucket": self._bucket.name, "Key": key}
-            return self._s3.meta.client.generate_presigned_url('get_object', Params=params)
-        
-        return f"{self._http_scheme}://{self.AWS_S3_ENDPOINT_URL}/{self.AWS_S3_BUCKET_NAME}/{key}"
+            return self._s3.meta.client.generate_presigned_url(
+                "get_object", Params=params
+            )
+
+        return "{}://{}/{}/{}".format(
+            self._http_scheme,
+            self.AWS_S3_ENDPOINT_URL,
+            self.AWS_S3_BUCKET_NAME,
+            key,
+        )
 
     def get_size(self, name: str) -> int:
         """
