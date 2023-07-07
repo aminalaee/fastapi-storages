@@ -8,7 +8,7 @@ description = 'FastAPI Storages'
 readme = "README.md"
 requires-python = ">=3.8"
 license = "MIT"
-keywords = ["sqlalchemy", "django", "orm"]
+keywords = ["sqlalchemy", "django", "orm", "fastapi"]
 authors = [
   { name = "Amin Alaee", email = "me@aminalaee.dev" },
 ]
@@ -87,9 +87,9 @@ test = "coverage run -m pytest {args}"
 
 [tool.hatch.envs.docs]
 dependencies = [
-  "mkdocs-material==8.5.7",
-  "mkdocs==1.4.1",
-  "mkdocstrings[python]==0.18.1",
+  "mkdocs-material==9.1.18",
+  "mkdocs==1.4.3",
+  "mkdocstrings[python]==0.22.0",
 ]
 
 [tool.hatch.envs.docs.scripts]
