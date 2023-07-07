@@ -37,6 +37,12 @@ class S3Storage(BaseStorage):
     """Optional ACL set on the object like `public-read`.
     By default file will be private."""
 
+    AWS_QUERYSTRING_AUTH = False
+    """Indicate if query parameter authentication should be used in URLs."""
+
+    AWS_S3_CUSTOM_DOMAIN = ""
+    """Custom domain to use for serving object URLs."""
+
     def __init__(self) -> None:
         assert boto3 is not None, "'boto3' is not installed"
         assert not self.AWS_S3_ENDPOINT_URL.startswith(
@@ -68,8 +74,15 @@ class S3Storage(BaseStorage):
         """
 
         key = self.get_name(name)
-        url = f"{self._url}/{self.AWS_S3_BUCKET_NAME}/{key}"
-        return url
+
+        if self.AWS_S3_CUSTOM_DOMAIN:
+            return f"{self._http_scheme}://{self.AWS_S3_CUSTOM_DOMAIN}/{self.AWS_S3_BUCKET_NAME}/{key}"
+
+        if self.AWS_QUERYSTRING_AUTH:
+            params = {"Bucket": self._bucket.name, "Key": key}
+            return self._s3.meta.client.generate_presigned_url('get_object', Params=params)
+        
+        return f"{self._http_scheme}://{self.AWS_S3_ENDPOINT_URL}/{self.AWS_S3_BUCKET_NAME}/{key}"
 
     def get_size(self, name: str) -> int:
         """

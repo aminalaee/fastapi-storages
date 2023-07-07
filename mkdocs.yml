@@ -30,11 +30,6 @@ plugins:
   - search
   - mkdocstrings:
       default_handler: python
-      handlers:
-        python:
-          rendering:
-            show_root_heading: true
-            show_source: false
 
 watch:
   - fastapi_storages/
