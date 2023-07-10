@@ -1,3 +1,4 @@
+import os
 from typing import BinaryIO
 
 
@@ -60,7 +61,10 @@ class StorageFile(str):
         Write input file which is opened in binary mode to destination.
         """
 
-        return self._storage.write(file=file, name=self._name)
+        path = self._storage.write(file=file, name=self._name)
+        self._name = os.path.basename(path)
+        return path
+
 
     def __str__(self) -> str:
         return self.path

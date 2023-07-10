@@ -38,3 +38,33 @@ def test_filesystem_storage_file_read_write(tmp_path: Path) -> None:
     byte_data = file.open().read()
 
     assert byte_data == b"123"
+
+
+def test_filesystem_storage_duplicate_file_names(tmp_path: Path) -> None:
+    import os
+    filename = "duplicate.txt"
+    base_file = filename.split('.')[0]
+
+    tmp_file = tmp_path / filename
+    tmp_file.write_bytes(b"123")
+    
+    base_path, ext = os.path.splitext(tmp_file)
+
+    storage = FileSystemStorage(path=tmp_path)
+    file1 = StorageFile(name=filename, storage=storage)
+    file1.write(file=tmp_file.open("rb"))
+
+    file2 = StorageFile(name=filename, storage=storage)
+    file2.write(file=tmp_file.open("rb"))
+
+    file3 = StorageFile(name=filename, storage=storage)
+    file3.write(file=tmp_file.open("rb"))
+
+    assert file1.name == f"{base_file}_1{ext}"
+    assert file2.name == f"{base_file}_2{ext}"
+    assert file3.name == f"{base_file}_3{ext}"
+
+    assert file1.path == f"{str(base_path)}_1{ext}"
+    assert file2.path == f"{str(base_path)}_2{ext}"
+    assert file3.path == f"{str(base_path)}_3{ext}"
+

@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 from typing import BinaryIO
 
@@ -52,8 +53,15 @@ class FileSystemStorage(BaseStorage):
         """
 
         filename = secure_filename(name)
+        counter = 0
         path = self._path / Path(filename)
 
+        while os.path.exists(path):
+            fn, extension = os.path.splitext(filename)
+
+            counter += 1
+            path = self._path / f"{fn}_{counter}{extension}"
+            
         file.seek(0, 0)
         with open(path, "wb") as output:
             while True:
