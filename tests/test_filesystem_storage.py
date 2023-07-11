@@ -50,7 +50,7 @@ def test_filesystem_storage_duplicate_file_names(tmp_path: Path) -> None:
     
     base_path, ext = os.path.splitext(tmp_file)
 
-    storage = FileSystemStorage(path=tmp_path)
+    storage = FileSystemStorage(path=tmp_path, overwrite_existing_files=False)
     file1 = StorageFile(name=filename, storage=storage)
     file1.write(file=tmp_file.open("rb"))
 

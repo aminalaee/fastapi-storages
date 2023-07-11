@@ -1,4 +1,3 @@
-import os
 from pathlib import Path
 from typing import BinaryIO
 
@@ -14,10 +13,12 @@ class FileSystemStorage(BaseStorage):
 
     default_chunk_size = 64 * 1024
 
-    def __init__(self, path: str):
+    def __init__(self, path: str, *args, **kwargs):
         self._path = Path(path)
         self._path.mkdir(parents=True, exist_ok=True)
+        super().__init__(*args, **kwargs)
 
+    
     def get_name(self, name: str) -> str:
         """
         Get the normalized name of the file.
@@ -53,14 +54,11 @@ class FileSystemStorage(BaseStorage):
         """
 
         filename = secure_filename(name)
-        counter = 0
-        path = self._path / Path(filename)
-
-        while os.path.exists(path):
-            fn, extension = os.path.splitext(filename)
-
-            counter += 1
-            path = self._path / f"{fn}_{counter}{extension}"
+        path_file = Path(filename)
+        path = self._path / path_file
+        
+        if not self.overwrite_existing_files:
+            path = self.rename_file(filename)
             
         file.seek(0, 0)
         with open(path, "wb") as output:
@@ -71,3 +69,15 @@ class FileSystemStorage(BaseStorage):
                 output.write(chunk)
 
         return str(path)
+
+    def rename_file(self, filename: str):
+        counter = 0
+        path = self._path / filename
+        tmp = Path(filename)
+        stem, extension = tmp.stem, tmp.suffix
+
+        while path.exists():
+            counter += 1
+            path = self._path / f"{stem}_{counter}{extension}"
+
+        return path

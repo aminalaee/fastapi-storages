@@ -1,6 +1,7 @@
 import os
+import re
 from pathlib import Path
-from typing import BinaryIO
+from typing import Any, BinaryIO
 
 try:
     import boto3
@@ -43,7 +44,7 @@ class S3Storage(BaseStorage):
     AWS_S3_CUSTOM_DOMAIN = ""
     """Custom domain to use for serving object URLs."""
 
-    def __init__(self) -> None:
+    def __init__(self, *args, **kwargs) -> None:
         assert boto3 is not None, "'boto3' is not installed"
         assert not self.AWS_S3_ENDPOINT_URL.startswith(
             "http"
@@ -59,6 +60,7 @@ class S3Storage(BaseStorage):
             aws_secret_access_key=self.AWS_SECRET_ACCESS_KEY,
         )
         self._bucket = self._s3.Bucket(name=self.AWS_S3_BUCKET_NAME)
+        super().__init__(*args, **kwargs)
 
     def get_name(self, name: str) -> str:
         """
@@ -110,5 +112,27 @@ class S3Storage(BaseStorage):
 
         file.seek(0, 0)
         key = self.get_name(name)
+
+        if not self.overwrite_existing_files:
+            key = self.rename_file(key)
+
         self._bucket.upload_fileobj(file, key, ExtraArgs={"ACL": self.AWS_DEFAULT_ACL})
         return key
+    
+    def rename_file(self, filename: str) -> str:
+        path = Path(filename)
+        base = path.parent / path.stem
+        objects = list(self._bucket.objects.filter(Prefix=str(base)))
+        
+        if not objects:
+            return filename
+        
+        highest_filename = sorted(objects, key=lambda x: x.key, reverse=True)[0].key
+        match = re.match(rf'{str(base)}(?:_(\d+))?\{path.suffix}$', highest_filename)
+
+        if match and match.group(1):
+            counter = int(match.group(1)) + 1
+        else:
+            counter = 1
+
+        return f"{str(base)}_{counter}{path.suffix}"

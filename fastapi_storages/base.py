@@ -1,8 +1,11 @@
-import os
-from typing import BinaryIO
+from pathlib import Path
+from typing import Any, BinaryIO
 
 
 class BaseStorage:  # pragma: no cover
+    def __init__(self, overwrite_existing_files=True) -> None:
+        self.overwrite_existing_files = overwrite_existing_files
+
     def get_name(self, name: str) -> str:
         ...
 
@@ -16,6 +19,9 @@ class BaseStorage:  # pragma: no cover
         ...
 
     def write(self, file: BinaryIO, name: str) -> str:
+        ...
+
+    def rename_file(self, filename: str) -> Any:
         ...
 
 
@@ -62,7 +68,7 @@ class StorageFile(str):
         """
 
         path = self._storage.write(file=file, name=self._name)
-        self._name = os.path.basename(path)
+        self._name = Path(path).name
         return path
 
 
