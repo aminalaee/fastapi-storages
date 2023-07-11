@@ -51,7 +51,7 @@ def test_valid_file(tmp_path: Path) -> None:
 
         assert model.file.name == "example.txt"
         assert model.file.size == 3
-        assert model.file.path == "/tmp/example.txt"
+        assert Path(model.file.path) == Path("/tmp/example.txt")
 
 
 def test_nullable_file() -> None:

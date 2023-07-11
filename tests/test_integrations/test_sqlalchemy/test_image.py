@@ -54,7 +54,7 @@ def test_valid_image(tmp_path: Path) -> None:
 
         assert model.image.name == "image.png"
         assert model.image.size == 5847
-        assert model.image.path == "/tmp/image.png"
+        assert Path(model.image.path) == Path("/tmp/image.png")
 
 
 def test_invalid_image(tmp_path: Path) -> None:

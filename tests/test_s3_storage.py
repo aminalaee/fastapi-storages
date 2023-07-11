@@ -29,15 +29,15 @@ def test_s3_storage_methods(tmp_path: Path) -> None:
 
     assert storage.get_name("test (1).txt") == "test_1.txt"
     assert (
-        storage.get_path("test (1).txt")
-        == "http://custom.s3.endpoint/bucket/test_1.txt"
+        Path(storage.get_path("test (1).txt"))
+        == Path("http://custom.s3.endpoint/bucket/test_1.txt")
     )
     assert (
-        storage.get_path("a/test.txt") == "http://custom.s3.endpoint/bucket/a/test.txt"
+        Path(storage.get_path("a/test.txt")) == Path("http://custom.s3.endpoint/bucket/a/test.txt")
     )
     assert (
-        storage.get_path("a/b/c/test.txt")
-        == "http://custom.s3.endpoint/bucket/a/b/c/test.txt"
+        Path(storage.get_path("a/b/c/test.txt"))
+        == Path("http://custom.s3.endpoint/bucket/a/b/c/test.txt")
     )
 
     storage.write(tmp_file.open("rb"), "example.txt")
@@ -78,7 +78,7 @@ def test_s3_storage_custom_domain(tmp_path: Path) -> None:
 
     storage = TestStorage()
 
-    assert storage.get_path("test.txt") == "http://s3.fastapi.storages/test.txt"
+    assert Path(storage.get_path("test.txt")) == Path("http://s3.fastapi.storages/test.txt")
 
 
 @mock_s3
