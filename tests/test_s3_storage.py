@@ -5,6 +5,7 @@ import boto3
 from moto import mock_s3
 
 from fastapi_storages import S3Storage
+from tests.utils import NonOverwritingFileSystemStorage
 
 os.environ["MOTO_S3_CUSTOM_ENDPOINTS"] = "http://custom.s3.endpoint"
 
@@ -82,14 +83,14 @@ def test_s3_storage_custom_domain(tmp_path: Path) -> None:
 
 
 @mock_s3
-def test_s3_storage_duplicate_file_names(tmp_path: Path) -> None:
+def test_s3_storage_rename_file_names(tmp_path: Path) -> None:
     s3 = boto3.client("s3")
     s3.create_bucket(Bucket="bucket")
 
     tmp_file = tmp_path / "duplicate.txt"
     tmp_file.write_bytes(b"123")
 
-    class TestStorage(PrivateS3Storage):
+    class TestStorage(PrivateS3Storage, NonOverwritingFileSystemStorage):
         AWS_S3_CUSTOM_DOMAIN = "s3.fastapi.storages"
 
     storage = TestStorage(overwrite_existing_files=False)
