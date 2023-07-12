@@ -92,15 +92,14 @@ def test_s3_storage_duplicate_file_names(tmp_path: Path) -> None:
     class TestStorage(PrivateS3Storage):
         AWS_S3_CUSTOM_DOMAIN = "s3.fastapi.storages"
 
-    storage1 = TestStorage(overwrite_existing_files=False)
-    storage2 = TestStorage(overwrite_existing_files=False)
-    storage3 = TestStorage(overwrite_existing_files=False)
+    storage = TestStorage(overwrite_existing_files=False)
 
-    key1 = storage1.write(tmp_file.open("rb"), "duplicate.txt")
-    key2 = storage2.write(tmp_file.open("rb"), "duplicate.txt")
-    key3 = storage3.write(tmp_file.open("rb"), "duplicate.txt")
+    key1 = storage.write(tmp_file.open("rb"), "duplicate.txt")
+    key2 = storage.write(tmp_file.open("rb"), "duplicate.txt")
+    key3 = storage.write(tmp_file.open("rb"), "duplicate.txt")
 
     assert key1 == "duplicate.txt"
     assert key2 == "duplicate_1.txt"
     assert key3 == "duplicate_2.txt"
 
+    assert Path(storage.get_path("duplicate_2.txt")) == Path("http://s3.fastapi.storages/duplicate_2.txt")

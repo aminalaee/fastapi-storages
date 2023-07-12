@@ -41,14 +41,9 @@ def test_filesystem_storage_file_read_write(tmp_path: Path) -> None:
 
 
 def test_filesystem_storage_duplicate_file_names(tmp_path: Path) -> None:
-    import os
     filename = "duplicate.txt"
-    base_file = filename.split('.')[0]
-
     tmp_file = tmp_path / filename
-    tmp_file.write_bytes(b"123")
-    
-    base_path, ext = os.path.splitext(tmp_file)
+    tmp_file.touch()
 
     storage = FileSystemStorage(path=tmp_path, overwrite_existing_files=False)
     file1 = StorageFile(name=filename, storage=storage)
@@ -60,11 +55,11 @@ def test_filesystem_storage_duplicate_file_names(tmp_path: Path) -> None:
     file3 = StorageFile(name=filename, storage=storage)
     file3.write(file=tmp_file.open("rb"))
 
-    assert file1.name == f"{base_file}_1{ext}"
-    assert file2.name == f"{base_file}_2{ext}"
-    assert file3.name == f"{base_file}_3{ext}"
+    assert file1.name == "duplicate_1.txt"
+    assert file2.name == "duplicate_2.txt"
+    assert file3.name == "duplicate_3.txt"
 
-    assert file1.path == f"{str(base_path)}_1{ext}"
-    assert file2.path == f"{str(base_path)}_2{ext}"
-    assert file3.path == f"{str(base_path)}_3{ext}"
+    assert Path(file1.path) == tmp_path / "duplicate_1.txt"
+    assert Path(file2.path) == tmp_path / "duplicate_2.txt"
+    assert Path(file3.path) == tmp_path / "duplicate_3.txt"
 
