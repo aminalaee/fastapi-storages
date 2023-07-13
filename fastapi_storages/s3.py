@@ -60,7 +60,6 @@ class S3Storage(BaseStorage):
             aws_secret_access_key=self.AWS_SECRET_ACCESS_KEY,
         )
         self._bucket = self._s3.Bucket(name=self.AWS_S3_BUCKET_NAME)
-        super().__init__(*args, **kwargs)
 
     def get_name(self, name: str) -> str:
         """
@@ -113,7 +112,7 @@ class S3Storage(BaseStorage):
         file.seek(0, 0)
         key = self.get_name(name)
 
-        if not self.overwrite_existing_files:
+        if not self.OVERWRITE_EXISTING_FILES:
             key = self.rename_file(key)
 
         self._bucket.upload_fileobj(file, key, ExtraArgs={"ACL": self.AWS_DEFAULT_ACL})
@@ -121,18 +120,27 @@ class S3Storage(BaseStorage):
     
     def rename_file(self, filename: str) -> str:
         path = Path(filename)
-        base = path.parent / path.stem
-        objects = list(self._bucket.objects.filter(Prefix=str(base)))
+        base = str(path.parent / path.stem)
+        suffix = path.suffix
         
-        if not objects:
-            return filename
-        
-        highest_filename = sorted(objects, key=lambda x: x.key, reverse=True)[0].key
-        match = re.match(rf'{str(base)}(?:_(\d+))?\{path.suffix}$', highest_filename)
+        counter = 0
 
-        if match and match.group(1):
-            counter = int(match.group(1)) + 1
-        else:
-            counter = 1
+        def obj_exists(obj):
+            try:
+                obj.load()
+                return True
+            except boto3.exceptions.botocore.exceptions.ClientError as e:
+                if e.response['Error']['Code'] == '404':
+                    return False
+            
+            return None
+ 
+        s3_object = self._bucket.Object(filename)
+        while obj_exists(s3_object):
+            counter += 1
+            path = f"{base}_{counter}{suffix}"
+            s3_object = self._bucket.Object(path)
 
-        return f"{str(base)}_{counter}{path.suffix}"
+        return str(path)
+
+

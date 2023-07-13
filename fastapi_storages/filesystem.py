@@ -16,7 +16,6 @@ class FileSystemStorage(BaseStorage):
     def __init__(self, path: str, *args, **kwargs):
         self._path = Path(path)
         self._path.mkdir(parents=True, exist_ok=True)
-        super().__init__(*args, **kwargs)
 
     
     def get_name(self, name: str) -> str:
@@ -57,7 +56,7 @@ class FileSystemStorage(BaseStorage):
         path_file = Path(filename)
         path = self._path / path_file
         
-        if not self.overwrite_existing_files:
+        if not self.OVERWRITE_EXISTING_FILES:
             path = self.rename_file(filename)
             
         file.seek(0, 0)

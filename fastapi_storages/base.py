@@ -3,8 +3,7 @@ from typing import Any, BinaryIO
 
 
 class BaseStorage:  # pragma: no cover
-    def __init__(self, overwrite_existing_files=True) -> None:
-        self.overwrite_existing_files = overwrite_existing_files
+    OVERWRITE_EXISTING_FILES = True
 
     def get_name(self, name: str) -> str:
         ...
