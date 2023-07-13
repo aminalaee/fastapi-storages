@@ -1,7 +1,10 @@
-from typing import BinaryIO
+from pathlib import Path
+from typing import Any, BinaryIO
 
 
 class BaseStorage:  # pragma: no cover
+    OVERWRITE_EXISTING_FILES = True
+
     def get_name(self, name: str) -> str:
         ...
 
@@ -15,6 +18,9 @@ class BaseStorage:  # pragma: no cover
         ...
 
     def write(self, file: BinaryIO, name: str) -> str:
+        ...
+
+    def rename_file(self, filename: str) -> Any:
         ...
 
 
@@ -60,7 +66,10 @@ class StorageFile(str):
         Write input file which is opened in binary mode to destination.
         """
 
-        return self._storage.write(file=file, name=self._name)
+        path = self._storage.write(file=file, name=self._name)
+        self._name = Path(path).name
+        return path
+
 
     def __str__(self) -> str:
         return self.path
