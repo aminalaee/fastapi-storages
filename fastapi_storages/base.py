@@ -1,9 +1,10 @@
-from pathlib import Path
-from typing import Any, BinaryIO
+from typing import BinaryIO
 
 
 class BaseStorage:  # pragma: no cover
     OVERWRITE_EXISTING_FILES = True
+    """Whether to overwrite existing files
+    if the name is the same or add a suffix to the filename."""
 
     def get_name(self, name: str) -> str:
         ...
@@ -20,7 +21,7 @@ class BaseStorage:  # pragma: no cover
     def write(self, file: BinaryIO, name: str) -> str:
         ...
 
-    def rename_file(self, filename: str) -> Any:
+    def generate_new_filename(self, filename: str) -> str:
         ...
 
 
@@ -66,10 +67,10 @@ class StorageFile(str):
         Write input file which is opened in binary mode to destination.
         """
 
-        path = self._storage.write(file=file, name=self._name)
-        self._name = Path(path).name
-        return path
+        if not self._storage.OVERWRITE_EXISTING_FILES:
+            self._name = self._storage.generate_new_filename(self._name)
 
+        return self._storage.write(file=file, name=self._name)
 
     def __str__(self) -> str:
         return self.path

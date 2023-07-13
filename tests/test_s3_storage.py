@@ -4,8 +4,7 @@ from pathlib import Path
 import boto3
 from moto import mock_s3
 
-from fastapi_storages import S3Storage
-from tests.utils import NonOverwritingFileSystemStorage
+from fastapi_storages import S3Storage, StorageFile
 
 os.environ["MOTO_S3_CUSTOM_ENDPOINTS"] = "http://custom.s3.endpoint"
 
@@ -87,20 +86,28 @@ def test_s3_storage_rename_file_names(tmp_path: Path) -> None:
     s3 = boto3.client("s3")
     s3.create_bucket(Bucket="bucket")
 
-    tmp_file = tmp_path / "duplicate.txt"
+    tmp_file = tmp_path / "input.txt"
     tmp_file.write_bytes(b"123")
 
-    class TestStorage(PrivateS3Storage, NonOverwritingFileSystemStorage):
+    class TestStorage(PrivateS3Storage):
         AWS_S3_CUSTOM_DOMAIN = "s3.fastapi.storages"
+        OVERWRITE_EXISTING_FILES = False
 
-    storage = TestStorage(overwrite_existing_files=False)
+    storage = TestStorage()
 
-    key1 = storage.write(tmp_file.open("rb"), "duplicate.txt")
-    key2 = storage.write(tmp_file.open("rb"), "duplicate.txt")
-    key3 = storage.write(tmp_file.open("rb"), "duplicate.txt")
+    file1 = StorageFile(name="duplicate.txt", storage=storage)
+    file1.write(file=tmp_file.open("rb"))
 
-    assert key1 == "duplicate.txt"
-    assert key2 == "duplicate_1.txt"
-    assert key3 == "duplicate_2.txt"
+    file2 = StorageFile(name="duplicate.txt", storage=storage)
+    file2.write(file=tmp_file.open("rb"))
 
-    assert Path(storage.get_path("duplicate_2.txt")) == Path("http://s3.fastapi.storages/duplicate_2.txt")
+    file3 = StorageFile(name="duplicate.txt", storage=storage)
+    file3.write(file=tmp_file.open("rb"))
+
+    assert file1.name == "duplicate.txt"
+    assert file2.name == "duplicate_1.txt"
+    assert file3.name == "duplicate_2.txt"
+
+    assert file1.path == "http://s3.fastapi.storages/duplicate.txt"
+    assert file2.path == "http://s3.fastapi.storages/duplicate_1.txt"
+    assert file3.path == "http://s3.fastapi.storages/duplicate_2.txt"

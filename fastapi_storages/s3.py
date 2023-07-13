@@ -1,7 +1,6 @@
 import os
-import re
 from pathlib import Path
-from typing import Any, BinaryIO
+from typing import BinaryIO
 
 try:
     import boto3
@@ -44,7 +43,7 @@ class S3Storage(BaseStorage):
     AWS_S3_CUSTOM_DOMAIN = ""
     """Custom domain to use for serving object URLs."""
 
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(self) -> None:
         assert boto3 is not None, "'boto3' is not installed"
         assert not self.AWS_S3_ENDPOINT_URL.startswith(
             "http"
@@ -112,35 +111,27 @@ class S3Storage(BaseStorage):
         file.seek(0, 0)
         key = self.get_name(name)
 
-        if not self.OVERWRITE_EXISTING_FILES:
-            key = self.rename_file(key)
-
         self._bucket.upload_fileobj(file, key, ExtraArgs={"ACL": self.AWS_DEFAULT_ACL})
         return key
-    
-    def rename_file(self, filename: str) -> str:
-        path = Path(filename)
-        base = str(path.parent / path.stem)
-        suffix = path.suffix
-        
+
+    def generate_new_filename(self, filename: str) -> str:
+        key = self.get_name(filename)
+        stem = Path(filename).stem
+        suffix = Path(filename).suffix
         counter = 0
 
-        def obj_exists(obj):
-            try:
-                obj.load()
-                return True
-            except boto3.exceptions.botocore.exceptions.ClientError as e:
-                if e.response['Error']['Code'] == '404':
-                    return False
-            
-            return None
- 
-        s3_object = self._bucket.Object(filename)
-        while obj_exists(s3_object):
+        while self._check_object_exists(key):
             counter += 1
-            path = f"{base}_{counter}{suffix}"
-            s3_object = self._bucket.Object(path)
+            filename = f"{stem}_{counter}{suffix}"
+            key = self.get_name(filename)
 
-        return str(path)
+        return filename
 
+    def _check_object_exists(self, key: str) -> bool:
+        try:
+            self._bucket.Object(key).load()
+        except boto3.exceptions.botocore.exceptions.ClientError as e:
+            if e.response["Error"]["Code"] == "404":
+                return False
 
+        return True
