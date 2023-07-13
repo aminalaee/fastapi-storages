@@ -1,7 +1,6 @@
 import os
-import re
 from pathlib import Path
-from typing import Any, BinaryIO
+from typing import BinaryIO
 
 try:
     import boto3

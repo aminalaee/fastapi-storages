@@ -103,4 +103,7 @@ def test_s3_storage_rename_file_names(tmp_path: Path) -> None:
     assert key2 == "duplicate_1.txt"
     assert key3 == "duplicate_2.txt"
 
-    assert Path(storage.get_path("duplicate_2.txt")) == Path("http://s3.fastapi.storages/duplicate_2.txt")
+    assert (
+        Path(storage.get_path("duplicate_2.txt")) 
+        == Path("http://s3.fastapi.storages/duplicate_2.txt")
+    )
