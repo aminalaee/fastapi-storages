@@ -41,7 +41,9 @@ def prepare_database():
 
 
 def test_valid_image(tmp_path: Path) -> None:
-    input_file = tmp_path / "image.png"
+    Model.image.type.storage = FileSystemStorage(path=str(tmp_path))
+
+    input_file = tmp_path / "input.png"
     image = Image.new("RGB", (800, 1280), (255, 255, 255))
     image.save(input_file, "PNG")
 
@@ -54,7 +56,7 @@ def test_valid_image(tmp_path: Path) -> None:
 
         assert model.image.name == "image.png"
         assert model.image.size == 5847
-        assert model.image.path == "/tmp/image.png"
+        assert model.image.path == str(tmp_path / "image.png")
 
 
 def test_invalid_image(tmp_path: Path) -> None:

@@ -39,6 +39,8 @@ def prepare_database():
 
 
 def test_valid_file(tmp_path: Path) -> None:
+    Model.file.type.storage = FileSystemStorage(path=str(tmp_path))
+
     input_file = tmp_path / "input.txt"
     input_file.write_bytes(b"123")
 
@@ -51,7 +53,7 @@ def test_valid_file(tmp_path: Path) -> None:
 
         assert model.file.name == "example.txt"
         assert model.file.size == 3
-        assert model.file.path == "/tmp/example.txt"
+        assert model.file.path == str(tmp_path / "example.txt")
 
 
 def test_nullable_file() -> None:

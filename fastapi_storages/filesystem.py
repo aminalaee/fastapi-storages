@@ -13,11 +13,10 @@ class FileSystemStorage(BaseStorage):
 
     default_chunk_size = 64 * 1024
 
-    def __init__(self, path: str, *args, **kwargs):
+    def __init__(self, path: str) -> None:
         self._path = Path(path)
         self._path.mkdir(parents=True, exist_ok=True)
 
-    
     def get_name(self, name: str) -> str:
         """
         Get the normalized name of the file.
@@ -53,12 +52,8 @@ class FileSystemStorage(BaseStorage):
         """
 
         filename = secure_filename(name)
-        path_file = Path(filename)
-        path = self._path / path_file
-        
-        if not self.OVERWRITE_EXISTING_FILES:
-            path = self.rename_file(filename)
-            
+        path = self._path / Path(filename)
+
         file.seek(0, 0)
         with open(path, "wb") as output:
             while True:
@@ -69,14 +64,13 @@ class FileSystemStorage(BaseStorage):
 
         return str(path)
 
-    def rename_file(self, filename: str):
+    def generate_new_filename(self, filename: str) -> str:
         counter = 0
         path = self._path / filename
-        tmp = Path(filename)
-        stem, extension = tmp.stem, tmp.suffix
+        stem, extension = Path(filename).stem, Path(filename).suffix
 
         while path.exists():
             counter += 1
             path = self._path / f"{stem}_{counter}{extension}"
 
-        return path
+        return path.name

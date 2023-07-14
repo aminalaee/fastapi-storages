@@ -1,7 +1,6 @@
 from pathlib import Path
 
 from fastapi_storages import FileSystemStorage, StorageFile, StorageImage
-from tests.utils import NonOverwritingFileSystemStorage
 
 
 def test_filesystem_storage_file_properties(tmp_path: Path) -> None:
@@ -42,25 +41,26 @@ def test_filesystem_storage_file_read_write(tmp_path: Path) -> None:
 
 
 def test_filesystem_storage_rename_file_names(tmp_path: Path) -> None:
-    filename = "duplicate.txt"
-    tmp_file = tmp_path / filename
+    tmp_file = tmp_path / "input.txt"
     tmp_file.touch()
 
+    class NonOverwritingFileSystemStorage(FileSystemStorage):
+        OVERWRITE_EXISTING_FILES = False
+
     storage = NonOverwritingFileSystemStorage(path=tmp_path)
-    file1 = StorageFile(name=filename, storage=storage)
+    file1 = StorageFile(name="duplicate.txt", storage=storage)
     file1.write(file=tmp_file.open("rb"))
 
-    file2 = StorageFile(name=filename, storage=storage)
+    file2 = StorageFile(name="duplicate.txt", storage=storage)
     file2.write(file=tmp_file.open("rb"))
 
-    file3 = StorageFile(name=filename, storage=storage)
+    file3 = StorageFile(name="duplicate.txt", storage=storage)
     file3.write(file=tmp_file.open("rb"))
 
-    assert file1.name == "duplicate_1.txt"
-    assert file2.name == "duplicate_2.txt"
-    assert file3.name == "duplicate_3.txt"
+    assert file1.name == "duplicate.txt"
+    assert file2.name == "duplicate_1.txt"
+    assert file3.name == "duplicate_2.txt"
 
-    assert Path(file1.path) == tmp_path / "duplicate_1.txt"
-    assert Path(file2.path) == tmp_path / "duplicate_2.txt"
-    assert Path(file3.path) == tmp_path / "duplicate_3.txt"
-
+    assert Path(file1.path) == tmp_path / "duplicate.txt"
+    assert Path(file2.path) == tmp_path / "duplicate_1.txt"
+    assert Path(file3.path) == tmp_path / "duplicate_2.txt"
