@@ -125,3 +125,40 @@ the file is stored in the specified storage and then the record is saved.
 
 You can just replace the storage with `S3Storage` and everything works without the change.
 This will make your code cleaner and more readable.
+
+#### Integration with Alembic
+
+By default, these new types are not registered in Alembic's migrations. To integrate these new types with Alembic, one needs to follow:
+
+##### 1. Create new "type" on top of these types
+
+Let's say, we create the following snippet in `custom_types.py`
+
+```python
+from fastapi_storages.integrations.sqlalchemy import FileType as _FileType
+from fastapi_storages import FileSystemStorage
+
+class FileType(_FileType):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        super().__init__(storage=FileSystemStorage(path='/tmp'), *args, **kwargs)
+```
+
+##### 2. Add files path to `script.py.mako`
+
+After using this type in any model's field, adding the following line to `alembic/script.py.mako` is enough to make migrations work.
+
+```
+"""${message}
+
+Revision ID: ${up_revision}
+Revises: ${down_revision | comma,n}
+Create Date: ${create_date}
+
+"""
+import sqlalchemy as sa
+from alembic import op
+import path_to_custom_types_py_file
+${imports if imports else ""}
+
+# THE REST OF SCRIPT
+```
