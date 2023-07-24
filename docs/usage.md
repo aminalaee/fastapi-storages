@@ -128,11 +128,12 @@ This will make your code cleaner and more readable.
 
 #### Integration with Alembic
 
-By default, these new types are not registered in Alembic's migrations. To integrate these new types with Alembic, one needs to follow:
+By default, custom types are not registered in Alembic's migrations.
+To integrate these new types with Alembic, you can do either of these:
 
-##### 1. Create new "type" on top of these types
+##### Create new "type" on top of these types
 
-Let's say, we create the following snippet in `custom_types.py`
+We create the following snippet in `custom_types.py`
 
 ```python
 from fastapi_storages.integrations.sqlalchemy import FileType as _FileType
@@ -143,9 +144,11 @@ class FileType(_FileType):
         super().__init__(storage=FileSystemStorage(path='/tmp'), *args, **kwargs)
 ```
 
-##### 2. Add files path to `script.py.mako`
+And by using the new `FileType` Alembic can do the imports properly, it's a simple trick, but is very simple.
 
-After using this type in any model's field, adding the following line to `alembic/script.py.mako` is enough to make migrations work.
+##### Add files path to `script.py.mako`
+
+Alembic allows you to modify `alembic/script.py.mako` and the migrations are generated with proper imports.
 
 ```
 """${message}
