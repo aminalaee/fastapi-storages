@@ -116,7 +116,7 @@ class ImageType(TypeDecorator):
         if value is None:
             return value
 
-        image = Image.open(self.storage.get_path(value))
-        return StorageImage(
-            name=value, storage=self.storage, height=image.height, width=image.width
-        )
+        with Image.open(self.storage.get_path(value)) as image:
+            return StorageImage(
+                name=value, storage=self.storage, height=image.height, width=image.width
+            )
