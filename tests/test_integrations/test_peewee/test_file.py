@@ -6,10 +6,10 @@ from peewee import AutoField, Model, SqliteDatabase
 
 from fastapi_storages import FileSystemStorage
 from fastapi_storages.integrations.peewee import FileType
-from tests.engine import database_uri
+from tests.engine import database_name
 from tests.test_integrations.utils import UploadFile
 
-db = SqliteDatabase(database_uri)
+db = SqliteDatabase(database_name)
 
 
 class Model(Model):
