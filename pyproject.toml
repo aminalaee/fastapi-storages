@@ -36,6 +36,7 @@ dynamic = ["version"]
 full = [
   "Pillow~=9.4",
   "sqlalchemy>=1.4",
+  "peewee>=3",
 ]
 
 [project.urls]
@@ -64,6 +65,7 @@ dependencies = [
   "coverage==6.5.0",
   "moto==4.1.2",
   "mypy==0.982",
+  "peewee>=3",
   "Pillow==9.4.0",
   "pytest==7.2.0",
   "ruff==0.0.237",
