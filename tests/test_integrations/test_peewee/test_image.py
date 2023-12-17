@@ -8,10 +8,10 @@ from PIL import Image
 from fastapi_storages import FileSystemStorage
 from fastapi_storages.exceptions import ValidationException
 from fastapi_storages.integrations.peewee import ImageType
-from tests.engine import database_uri
+from tests.engine import database_name
 from tests.test_integrations.utils import UploadFile
 
-db = SqliteDatabase(database_uri)
+db = SqliteDatabase(database_name)
 
 
 class Model(Model):
