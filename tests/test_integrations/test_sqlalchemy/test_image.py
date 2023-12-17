@@ -1,6 +1,5 @@
 import io
 from pathlib import Path
-from typing import BinaryIO
 
 import pytest
 from PIL import Image
@@ -11,19 +10,10 @@ from sqlalchemy.orm import Session, declarative_base
 from fastapi_storages import FileSystemStorage
 from fastapi_storages.integrations.sqlalchemy import ImageType
 from tests.engine import database_uri
+from tests.test_integrations.utils import UploadFile
 
 Base = declarative_base()
 engine = create_engine(database_uri)
-
-
-class UploadFile:
-    """
-    Dummy UploadFile like the one in Starlette.
-    """
-
-    def __init__(self, file: BinaryIO, filename: str) -> None:
-        self.file = file
-        self.filename = filename
 
 
 class Model(Base):
