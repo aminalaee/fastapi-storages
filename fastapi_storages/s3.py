@@ -111,7 +111,9 @@ class S3Storage(BaseStorage):
         file.seek(0, 0)
         key = self.get_name(name)
 
-        self._bucket.upload_fileobj(file, key, ExtraArgs={"ACL": self.AWS_DEFAULT_ACL, "ContentType": "image/png"})
+        self._bucket.upload_fileobj(file, key, ExtraArgs={
+            "ACL": self.AWS_DEFAULT_ACL, "ContentType": "image/png"
+        })
         return key
 
     def generate_new_filename(self, filename: str) -> str:
