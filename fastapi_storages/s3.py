@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 from typing import BinaryIO
 import mimetypes
+
 try:
     import boto3
 except ImportError:  # pragma: no cover
