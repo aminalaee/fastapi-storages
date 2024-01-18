@@ -1,7 +1,7 @@
+import mimetypes
 import os
 from pathlib import Path
 from typing import BinaryIO
-import mimetypes
 
 try:
     import boto3
