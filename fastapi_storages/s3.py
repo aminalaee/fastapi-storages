@@ -114,7 +114,10 @@ class S3Storage(BaseStorage):
         file.seek(0, 0)
         key = self.get_name(name)
         content_type, _ = mimetypes.guess_type(key)
-        params = {"ACL": self.AWS_DEFAULT_ACL, "ContentType": content_type or self.default_content_type}
+        params = {
+            "ACL": self.AWS_DEFAULT_ACL,
+            "ContentType": content_type or self.default_content_type,
+        }
         self._bucket.upload_fileobj(file, key, ExtraArgs=params)
         return key
 
