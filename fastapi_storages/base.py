@@ -7,22 +7,22 @@ class BaseStorage:  # pragma: no cover
     if the name is the same or add a suffix to the filename."""
 
     def get_name(self, name: str) -> str:
-        ...
+        raise NotImplementedError()
 
     def get_path(self, name: str) -> str:
-        ...
+        raise NotImplementedError()
 
     def get_size(self, name: str) -> int:
-        ...
+        raise NotImplementedError()
 
     def open(self, name: str) -> BinaryIO:
-        ...
+        raise NotImplementedError()
 
     def write(self, file: BinaryIO, name: str) -> str:
-        ...
+        raise NotImplementedError()
 
     def generate_new_filename(self, filename: str) -> str:
-        ...
+        raise NotImplementedError()
 
 
 class StorageFile(str):
