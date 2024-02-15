@@ -1,3 +1,4 @@
+import mimetypes
 import os
 from pathlib import Path
 from typing import BinaryIO
@@ -17,6 +18,8 @@ class S3Storage(BaseStorage):
     You might want to use this with the `FileType` type.
     Requires `boto3` to be installed.
     """
+
+    default_content_type = "application/octet-stream"
 
     AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID", "")
     """AWS access key ID. Either set here or as an environment variable."""
@@ -110,8 +113,12 @@ class S3Storage(BaseStorage):
 
         file.seek(0, 0)
         key = self.get_name(name)
-
-        self._bucket.upload_fileobj(file, key, ExtraArgs={"ACL": self.AWS_DEFAULT_ACL})
+        content_type, _ = mimetypes.guess_type(key)
+        params = {
+            "ACL": self.AWS_DEFAULT_ACL,
+            "ContentType": content_type or self.default_content_type,
+        }
+        self._bucket.upload_fileobj(file, key, ExtraArgs=params)
         return key
 
     def generate_new_filename(self, filename: str) -> str:
