@@ -165,3 +165,28 @@ ${imports if imports else ""}
 
 # THE REST OF SCRIPT
 ```
+
+### SQLModel
+
+If you're using sqlmodel, you'll need to annotate the type with StorageFile and enable the model's arbitrary_types_allowed configuration.
+
+```python
+from sqlmodel import SQLModel, Column, Field
+from sqlmodel.main import SQLModelConfig
+from fastapi_storages import FileSystemStorage
+from fastapi_storages.base import StorageFile
+from fastapi_storages.integrations.sqlalchemy import FileType
+
+
+class Upload(SQLModel, table=True):
+    id: int | None = Field(default=None, primary_key=True)   
+    file: StorageFile = Field(
+        sa_column=Column(
+            FileType(storage=FileSystemStorage(path="/tmp")),
+        ),
+    )
+
+    model_config = SQLModelConfig(
+        arbitrary_types_allowed=True,
+    )
+```
