@@ -43,7 +43,7 @@ class FileSystemStorage(BaseStorage):
         Open a file handle of the file object in binary mode.
         """
 
-        path = self._path / Path(name)
+        path = self.get_path(name)
         return open(path, "rb")
 
     def write(self, file: BinaryIO, name: str) -> str:
