@@ -34,7 +34,7 @@ dynamic = ["version"]
 
 [project.optional-dependencies]
 full = [
-  "Pillow~=9.4",
+  "Pillow~=10.0",
   "sqlalchemy>=1.4",
   "peewee>=3",
 ]
