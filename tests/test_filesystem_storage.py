@@ -64,3 +64,18 @@ def test_filesystem_storage_rename_file_names(tmp_path: Path) -> None:
     assert Path(file1.path) == tmp_path / "duplicate.txt"
     assert Path(file2.path) == tmp_path / "duplicate_1.txt"
     assert Path(file3.path) == tmp_path / "duplicate_2.txt"
+
+
+def test_filesystem_storage_delete_file(tmp_path: Path) -> None:
+    input_file = tmp_path / "input.txt"
+    input_file.write_bytes(b"123")
+
+    storage = FileSystemStorage(path=tmp_path)
+    file = StorageFile(name="example.txt", storage=storage)
+    file.write(file=input_file.open("rb"))
+
+    assert (tmp_path / "example.txt").exists() is True
+
+    file.delete()
+
+    assert (tmp_path / "example.txt").exists() is False

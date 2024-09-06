@@ -21,6 +21,9 @@ class BaseStorage:  # pragma: no cover
     def write(self, file: BinaryIO, name: str) -> str:
         raise NotImplementedError()
 
+    def delete(self, name: str) -> None:
+        raise NotImplementedError()
+
     def generate_new_filename(self, filename: str) -> str:
         raise NotImplementedError()
 
@@ -71,6 +74,13 @@ class StorageFile(str):
             self._name = self._storage.generate_new_filename(self._name)
 
         return self._storage.write(file=file, name=self._name)
+
+    def delete(self) -> None:
+        """
+        Delete file from the storage
+        """
+
+        return self._storage.delete(self._name)
 
     def __str__(self) -> str:
         return self.path

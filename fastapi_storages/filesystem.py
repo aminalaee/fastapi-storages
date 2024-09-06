@@ -64,6 +64,13 @@ class FileSystemStorage(BaseStorage):
 
         return str(path)
 
+    def delete(self, name: str) -> None:
+        """
+        Delete the file from the filesystem.
+        """
+
+        Path(self.get_path(name)).unlink()
+
     def generate_new_filename(self, filename: str) -> str:
         counter = 0
         path = self._path / filename

@@ -2,6 +2,8 @@ import os
 from pathlib import Path
 
 import boto3
+import pytest
+from botocore.exceptions import ClientError
 from moto import mock_s3
 
 from fastapi_storages import S3Storage, StorageFile
@@ -111,3 +113,24 @@ def test_s3_storage_rename_file_names(tmp_path: Path) -> None:
     assert file1.path == "http://s3.fastapi.storages/duplicate.txt"
     assert file2.path == "http://s3.fastapi.storages/duplicate_1.txt"
     assert file3.path == "http://s3.fastapi.storages/duplicate_2.txt"
+
+
+@mock_s3
+def test_s3_storage_delete_file(tmp_path: Path) -> None:
+    s3 = boto3.client("s3")
+    s3.create_bucket(Bucket="bucket")
+
+    tmp_file = tmp_path / "example.txt"
+    tmp_file.write_bytes(b"123")
+
+    storage = PrivateS3Storage()
+
+    file = StorageFile(name="file.txt", storage=storage)
+    file.write(file=tmp_file.open("rb"))
+
+    assert s3.head_object(Bucket="bucket", Key="file.txt")
+
+    file.delete()
+
+    with pytest.raises(ClientError):
+        s3.head_object(Bucket="bucket", Key="file.txt")
