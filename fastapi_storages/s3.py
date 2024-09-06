@@ -54,14 +54,13 @@ class S3Storage(BaseStorage):
 
         self._http_scheme = "https" if self.AWS_S3_USE_SSL else "http"
         self._url = f"{self._http_scheme}://{self.AWS_S3_ENDPOINT_URL}"
-        self._s3 = boto3.resource(
+        self._s3 = boto3.client(
             "s3",
             endpoint_url=self._url,
             use_ssl=self.AWS_S3_USE_SSL,
             aws_access_key_id=self.AWS_ACCESS_KEY_ID,
             aws_secret_access_key=self.AWS_SECRET_ACCESS_KEY,
         )
-        self._bucket = self._s3.Bucket(name=self.AWS_S3_BUCKET_NAME)
 
     def get_name(self, name: str) -> str:
         """
@@ -86,10 +85,8 @@ class S3Storage(BaseStorage):
             )
 
         if self.AWS_QUERYSTRING_AUTH:
-            params = {"Bucket": self._bucket.name, "Key": key}
-            return self._s3.meta.client.generate_presigned_url(
-                "get_object", Params=params
-            )
+            params = {"Bucket": self.AWS_S3_BUCKET_NAME, "Key": key}
+            return self._s3.generate_presigned_url("get_object", Params=params)
 
         return "{}://{}/{}/{}".format(
             self._http_scheme,
@@ -104,7 +101,9 @@ class S3Storage(BaseStorage):
         """
 
         key = self.get_name(name)
-        return self._bucket.Object(key).content_length
+        return self._s3.head_object(Bucket=self.AWS_S3_BUCKET_NAME, Key=key)[
+            "ContentLength"
+        ]
 
     def write(self, file: BinaryIO, name: str) -> str:
         """
@@ -118,8 +117,15 @@ class S3Storage(BaseStorage):
             "ACL": self.AWS_DEFAULT_ACL,
             "ContentType": content_type or self.default_content_type,
         }
-        self._bucket.upload_fileobj(file, key, ExtraArgs=params)
+        self._s3.upload_fileobj(file, self.AWS_S3_BUCKET_NAME, key, ExtraArgs=params)
         return key
+
+    def delete(self, name: str) -> None:
+        """
+        Delete the file from S3
+        """
+
+        self._s3.delete_object(Bucket=self.AWS_S3_BUCKET_NAME, Key=self.get_name(name))
 
     def generate_new_filename(self, filename: str) -> str:
         key = self.get_name(filename)
@@ -136,7 +142,7 @@ class S3Storage(BaseStorage):
 
     def _check_object_exists(self, key: str) -> bool:
         try:
-            self._bucket.Object(key).load()
+            self._s3.head_object(Bucket=self.AWS_S3_BUCKET_NAME, Key=key)
         except boto3.exceptions.botocore.exceptions.ClientError as e:
             if e.response["Error"]["Code"] == "404":
                 return False
