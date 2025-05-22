@@ -1,6 +1,6 @@
 site_name: FastAPI Storages
 site_description: FastAPI Storages
-site_url: https://aminalaee.dev/fastapi-storages
+site_url: https://aminalaee.github.io/fastapi-storages
 
 theme:
   name: 'material'

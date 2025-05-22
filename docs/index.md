@@ -32,7 +32,7 @@ Similar to `django-storages` project, but aiming to work with a wider range of d
 
 ---
 
-**Documentation**: [https://aminalaee.dev/fastapi-storages](https://aminalaee.dev/fastapi-storages)
+**Documentation**: [https://aminalaee.github.io/fastapi-storages](https://aminalaee.github.io/fastapi-storages)
 
 **Source Code**: [https://github.com/aminalaee/fastapi-storages](https://github.com/aminalaee/fastapi-storages)
 
