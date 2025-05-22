@@ -40,6 +40,12 @@ class S3Storage(BaseStorage):
     """Optional ACL set on the object like `public-read`.
     By default file will be private."""
 
+    AWS_SIGNATURE_VERSIONS = "s3v4"
+    """Optional signature versions.
+    Note that the default version is Signature Version 4. 
+    If you’re using a presigned URL with an expiry of greater than 7 days, 
+    you should specify Signature Version 2."""
+
     AWS_QUERYSTRING_AUTH = False
     """Indicate if query parameter authentication should be used in URLs."""
 
@@ -54,13 +60,24 @@ class S3Storage(BaseStorage):
 
         self._http_scheme = "https" if self.AWS_S3_USE_SSL else "http"
         self._url = f"{self._http_scheme}://{self.AWS_S3_ENDPOINT_URL}"
-        self._s3 = boto3.client(
-            "s3",
-            endpoint_url=self._url,
-            use_ssl=self.AWS_S3_USE_SSL,
-            aws_access_key_id=self.AWS_ACCESS_KEY_ID,
-            aws_secret_access_key=self.AWS_SECRET_ACCESS_KEY,
-        )
+
+        if self.AWS_SIGNATURE_VERSIONS == "s3":
+            self._s3 = boto3.client(
+                "s3",
+                endpoint_url=self._url,
+                use_ssl=self.AWS_S3_USE_SSL,
+                signature_version=self.AWS_SIGNATURE_VERSIONS,
+                aws_access_key_id=self.AWS_ACCESS_KEY_ID,
+                aws_secret_access_key=self.AWS_SECRET_ACCESS_KEY,
+            )
+        else:
+            self._s3 = boto3.client(
+                "s3",
+                endpoint_url=self._url,
+                use_ssl=self.AWS_S3_USE_SSL,
+                aws_access_key_id=self.AWS_ACCESS_KEY_ID,
+                aws_secret_access_key=self.AWS_SECRET_ACCESS_KEY,
+            )
 
     def get_name(self, name: str) -> str:
         """
